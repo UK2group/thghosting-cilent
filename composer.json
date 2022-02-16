@@ -5,7 +5,7 @@
     "license": "GNU General Public License v2.0",
     "autoload": {
         "psr-4": {
-            "Thg\\": "src/"
+            "ThgHosting\\": "src/"
         }
     },
     "minimum-stability": "dev",

@@ -8,14 +8,14 @@
  * Manchester, England, M90 3DQ
  * @author Michal Dzierzbicki <michal.dzierzbicki@thg.com>
  */
-namespace Thg;
+namespace ThgHosting;
 
 use ThgException;
 
 /**
  * THG Hosting API Client
  */
-final class ThgClient
+final class ThgHostingClient
 {
     private $host = 'https://api.thghosting.com/rest-api/';
     private const GET    = "GET";

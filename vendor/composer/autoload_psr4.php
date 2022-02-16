@@ -6,5 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Thg\\' => array($baseDir . '/src'),
+    'ThgHosting\\' => array($baseDir . '/src'),
 );

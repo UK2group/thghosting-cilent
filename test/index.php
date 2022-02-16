@@ -2,7 +2,8 @@
     require_once '../vendor/autoload.php';
     try {
         echo "a";
-        new Thg\ThgClient('a');
+        $client = new ThgHosting\ThgHostingClient('a');
+
     } catch (\Throwable $e) {
         echo $e->getMessage() . " => " . $e->getFile() . " => " . $e->getLine();
     }
