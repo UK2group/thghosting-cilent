@@ -18,18 +18,18 @@ use ThgException;
 final class ThgHostingClient
 {
     private $host = 'https://api.thghosting.com/rest-api/';
-    private const GET    = "GET";
-    private const POST   = "POST";
-    private const DELETE = "DELETE";
-    private const PUT    = "PUT";
-    private const PATCH  = "PATCH";
+    public const GET    = "GET";
+    public const POST   = "POST";
+    public const DELETE = "DELETE";
+    public const PUT    = "PUT";
+    public const PATCH  = "PATCH";
     private $timeout = 500;
     private $allowedMethods = [
-        self::GET    => [CURLOPT_HTTPGET, true],
-        self::POST   => [CURLOPT_POST, true],
+        self::GET    => [CURLOPT_CUSTOMREQUEST, self::GET   ],
+        self::POST   => [CURLOPT_CUSTOMREQUEST, self::POST  ],
         self::DELETE => [CURLOPT_CUSTOMREQUEST, self::DELETE],
-        self::PUT    => [CURLOPT_PUT, true],
-        self::PATCH  => [CURLOPT_CUSTOMREQUEST, self::PATCH]
+        self::PUT    => [CURLOPT_CUSTOMREQUEST, self::PUT   ],
+        self::PATCH  => [CURLOPT_CUSTOMREQUEST, self::PATCH ]
     ];
 
     /** @var string */
@@ -52,28 +52,32 @@ final class ThgHostingClient
     /**
      * Create custom request to Open API
      *
-     * @param  string $method    Allowed methods: GET, POST, DELETE, PUT, PATCH
-     * @param  string $endpoint  Path to the chosen End Point
-     * @param  array  $arguments Optional; Arguments to addtionally send
-     * @return array             Result of request
+     * @param  string       $method    Allowed methods: GET, POST, DELETE, PUT, PATCH
+     * @param  string       $endpoint  Path to the chosen End Point
+     * @param  array        $arguments Optional; Arguments to addtionally send
+     * @return string|array            Result of request
      */
-    public function request(string $method, string $endpoint, array $arguments = []): array
+    public function request(string $method, string $endpoint, array $arguments = [])
     {
         if (!$this->validateMethod($method)) {
             throw new ThgException("Not allowed method used. Allowed: " . implode(', ', array_keys($allowedMethods)), 405);
         }
 
         $requestParams = $this->allowedMethods[$method];
-
         $curl = curl_init();
 
-        curl_setopt($curl, ...$requestParams);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, TRUE);
+        curl_setopt($curl, ...$requestParams);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, [
+            "X-Api-Token: " . $this->xApiToken,
+            "Content-type: application/x-www-form-urlencoded",
+            "Accept: application/json"
+        ]);
 
-        $url = $this->host . trim('/', $endpoint) . '/';
+        $url = $this->host . trim($endpoint, '/') . '/';
 
         if ($method === self::GET && \sizeof($arguments) > 0) {
             $query = http_build_query($arguments);
@@ -86,8 +90,155 @@ final class ThgHostingClient
         $result = curl_exec($curl);
         curl_close($curl);
 
-        var_dump($result);
-        return $result;
+        return json_decode($result, true) ?? $result;
+    }
+
+    public function getSsdVpsPlans()
+    {
+        return $this->request(self::GET, "ssd-vps/plans");
+    }
+
+    public function getSsdVpsLocations()
+    {
+        return $this->request(self::GET, "ssd-vps/locations");
+    }
+
+    public function getSsdVpsCustomTemplates(int $locationId)
+    {
+        return $this->request(self::GET, "ssd-vps/locations/$locationId/templates/custom");
+    }
+
+    public function createSsdVpsServer(
+        int $locationId,
+        string $label,
+        string $hostname,
+        string $password,
+        int $servicePlanId,
+        ?string $osComponentCode = null,
+        ?bool $backups = null,
+        ?bool $billHourly = null,
+        ?int $customTemplateId = null
+    ) {
+        $params = [
+            "label"              => $label,
+            "hostname"           => $hostname,
+            "password"           => $password,
+            "service_plan_id"    => $servicePlanId
+        ];
+
+        if (!\is_null($customTemplateId)) {
+            $params["custom_template_id"] = $customTemplateId;
+        } elseif (!\is_null($osComponentCode)) {
+            $params["os_component_code"] = $osComponentCode;
+        }
+
+        if (!\is_null($billHourly)) {
+            $params["bill_hourly"] = $billHourly ? 1 : 0;
+        }
+
+        if (!\is_null($backups)) {
+            $params["backups"] = $backups ? 1 : 0;
+        }
+
+        return $this->request(
+            self::POST,
+            "ssd-vps/locations/$locationId/servers",
+            $params
+        );
+    }
+
+    public function getSsdVpsOses(int $locationId)
+    {
+        return $this->request(self::GET, "ssd-vps/locations/$locationId/operating-systems");
+    }
+
+    public function getSsdVpsServers(?int $locationId = null)
+    {
+        $params = [];
+        if (!\is_null($locationId)) {
+            $params["location_id"] = $locationId;
+        }
+        return $this->request(self::GET, "ssd-vps/servers", $params);
+    }
+
+    public function getSsdVpsServerDetails(int $locationId, int $serverId)
+    {
+        return $this->request(self::GET, "ssd-vps/locations/$locationId/servers/$serverId");
+    }
+
+    public function deleteSsdVpsServer(int $locationId, int $serverId)
+    {
+        return $this->request(self::DELETE, "ssd-vps/locations/$locationId/servers/$serverId");
+    }
+
+    public function getSsdVpsServerStatus(int $locationId, int $serverId)
+    {
+        return $this->request(self::GET, "ssd-vps/locations/$locationId/servers/$serverId/status");
+    }
+
+    public function powerOnSsdVpsServer(int $locationId, int $serverId)
+    {
+        return $this->request(self::POST, "ssd-vps/locations/$locationId/servers/$serverId/power/on");
+    }
+
+    public function powerOffSsdVpsServer(int $locationId, int $serverId)
+    {
+        return $this->request(self::POST, "ssd-vps/locations/$locationId/servers/$serverId/power/off");
+    }
+
+    public function rebootSsdVpsServer(int $locationId, int $serverId)
+    {
+        return $this->request(self::POST, "ssd-vps/locations/$locationId/servers/$serverId/power/reboot");
+    }
+
+    public function rebootSsdVpsServerInRecoveryMode(int $locationId, int $serverId)
+    {
+        return $this->request(self::POST, "ssd-vps/locations/$locationId/servers/$serverId/power/recovery-reboot");
+    }
+
+    public function resetSsdVpsServerPassword(int $locationId, int $serverId, ?string $newPassword = null)
+    {
+        $params = [];
+        if (!is_null($newPassword)) {
+            $params["new_password"] = $newPassword;
+        }
+
+        return $this->request(
+            self::POST,
+            "ssd-vps/locations/$locationId/servers/$serverId/password-reset",
+            $params
+        );
+    }
+
+    public function getSsdVpsServerBackups(int $locationId, int $serverId)
+    {
+        return $this->request(self::GET, "ssd-vps/locations/$locationId/servers/$serverId/backups");
+    }
+
+    public function addSsdVpsBackupNote(
+        int $locationId,
+        int $serverId,
+        int $backupId,
+        string $note
+    ) {
+
+        return $this->request(
+            self::POST,
+            "ssd-vps/locations/$locationId/servers/$serverId/backups/$backupId/note",
+            [
+                "note" => $note
+            ]
+        );
+    }
+
+    public function deleteSsdVpsBackup(int $locationId, int $serverId, int $backupId)
+    {
+        return $this->request(self::DELETE, "ssd-vps/locations/$locationId/servers/$serverId/backups/$backupId");
+    }
+
+    public function restoreSsdVpsBackup(int $locationId, int $serverId, int $backupId)
+    {
+        return $this->request(self::GET, "ssd-vps/locations/$locationId/servers/$serverId/backups/$backupId/restore");
     }
 
 }
