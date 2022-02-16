@@ -40,9 +40,9 @@ PHP Client for easier use of Open API
         string  $hostname,                // Hostname for the new SSD VPS Server
         string  $password,                // Password for the new SSD VPS Server
         int     $servicePlanId,           // ID of the chosen SSD VPS plan (see “Get SSD VPS Plans”)
-        ?string $osComponentCode = null,  // Optional; Component code of the SSD VPS operating system (see “Get SSD VPS Operating Systems”) (you have to pass either os_component_code or custom_template_id)
-        ?bool   $backups         = null,  // Optional; If passed, server will be created with Backup Protection
-        ?bool   $billHourly      = null,  // Optional; If passed billing will be set hourly, otherwise monthly billing will be used
+        ?string $osComponentCode  = null, // Optional; Component code of the SSD VPS operating system (see “Get SSD VPS Operating Systems”) (you have to pass either os_component_code or custom_template_id)
+        ?bool   $backups          = null, // Optional; If passed, server will be created with Backup Protection
+        ?bool   $billHourly       = null, // Optional; If passed billing will be set hourly, otherwise monthly billing will be used
         ?int    $customTemplateId = null  // Optional; Pass here the Template ID of Custom OS (see “Get Custom OSes for SSD VPS”) (you have to pass either os_component_code or custom_template_id)
     );
 ```
