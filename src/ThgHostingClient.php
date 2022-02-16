@@ -23,7 +23,7 @@ final class ThgHostingClient
     public const DELETE = "DELETE";
     public const PUT    = "PUT";
     public const PATCH  = "PATCH";
-    private $timeout = 500;
+    private $timeout = 60;
     private $allowedMethods = [
         self::GET    => [CURLOPT_CUSTOMREQUEST, self::GET   ],
         self::POST   => [CURLOPT_CUSTOMREQUEST, self::POST  ],
@@ -57,7 +57,7 @@ final class ThgHostingClient
      * @param  array        $arguments Optional; Arguments to addtionally send
      * @return string|array            Result of request
      */
-    public function request(string $method, string $endpoint, array $arguments = [], array $files = [])
+    public function request(string $method, string $endpoint, array $arguments = [], array $files = []): array
     {
         if (!$this->validateMethod($method)) {
             throw new ThgException("Not allowed method used. Allowed: " . implode(', ', array_keys($allowedMethods)), 405);
@@ -90,20 +90,23 @@ final class ThgHostingClient
         $result = curl_exec($curl);
         curl_close($curl);
 
-        return json_decode($result, true) ?? $result;
+        return [
+            "data" => json_decode($result, true) ?? $result,
+            "info" => curl_getinfo($curl)
+        ];
     }
 
-    public function getSsdVpsPlans()
+    public function getSsdVpsPlans(): array
     {
         return $this->request(self::GET, "ssd-vps/plans");
     }
 
-    public function getSsdVpsLocations()
+    public function getSsdVpsLocations(): array
     {
         return $this->request(self::GET, "ssd-vps/locations");
     }
 
-    public function getSsdVpsCustomTemplates(int $locationId)
+    public function getSsdVpsCustomTemplates(int $locationId): array
     {
         return $this->request(self::GET, "ssd-vps/locations/$locationId/templates/custom");
     }
@@ -118,7 +121,7 @@ final class ThgHostingClient
         ?bool $backups = null,
         ?bool $billHourly = null,
         ?int $customTemplateId = null
-    ) {
+    ): array {
         $params = [
             "label"              => $label,
             "hostname"           => $hostname,
@@ -147,12 +150,12 @@ final class ThgHostingClient
         );
     }
 
-    public function getSsdVpsOses(int $locationId)
+    public function getSsdVpsOses(int $locationId): array
     {
         return $this->request(self::GET, "ssd-vps/locations/$locationId/operating-systems");
     }
 
-    public function getSsdVpsServers(?int $locationId = null)
+    public function getSsdVpsServers(?int $locationId = null): array
     {
         $params = [];
         if (!\is_null($locationId)) {
@@ -161,42 +164,42 @@ final class ThgHostingClient
         return $this->request(self::GET, "ssd-vps/servers", $params);
     }
 
-    public function getSsdVpsServerDetails(int $locationId, int $serverId)
+    public function getSsdVpsServerDetails(int $locationId, int $serverId): array
     {
         return $this->request(self::GET, "ssd-vps/locations/$locationId/servers/$serverId");
     }
 
-    public function deleteSsdVpsServer(int $locationId, int $serverId)
+    public function deleteSsdVpsServer(int $locationId, int $serverId): array
     {
         return $this->request(self::DELETE, "ssd-vps/locations/$locationId/servers/$serverId");
     }
 
-    public function getSsdVpsServerStatus(int $locationId, int $serverId)
+    public function getSsdVpsServerStatus(int $locationId, int $serverId): array
     {
         return $this->request(self::GET, "ssd-vps/locations/$locationId/servers/$serverId/status");
     }
 
-    public function powerOnSsdVpsServer(int $locationId, int $serverId)
+    public function powerOnSsdVpsServer(int $locationId, int $serverId): array
     {
         return $this->request(self::POST, "ssd-vps/locations/$locationId/servers/$serverId/power/on");
     }
 
-    public function powerOffSsdVpsServer(int $locationId, int $serverId)
+    public function powerOffSsdVpsServer(int $locationId, int $serverId): array
     {
         return $this->request(self::POST, "ssd-vps/locations/$locationId/servers/$serverId/power/off");
     }
 
-    public function rebootSsdVpsServer(int $locationId, int $serverId)
+    public function rebootSsdVpsServer(int $locationId, int $serverId): array
     {
         return $this->request(self::POST, "ssd-vps/locations/$locationId/servers/$serverId/power/reboot");
     }
 
-    public function rebootSsdVpsServerInRecoveryMode(int $locationId, int $serverId)
+    public function rebootSsdVpsServerInRecoveryMode(int $locationId, int $serverId): array
     {
         return $this->request(self::POST, "ssd-vps/locations/$locationId/servers/$serverId/power/recovery-reboot");
     }
 
-    public function resetSsdVpsServerPassword(int $locationId, int $serverId, ?string $newPassword = null)
+    public function resetSsdVpsServerPassword(int $locationId, int $serverId, ?string $newPassword = null): array
     {
         $params = [];
         if (!is_null($newPassword)) {
@@ -210,7 +213,7 @@ final class ThgHostingClient
         );
     }
 
-    public function getSsdVpsServerBackups(int $locationId, int $serverId)
+    public function getSsdVpsServerBackups(int $locationId, int $serverId): array
     {
         return $this->request(self::GET, "ssd-vps/locations/$locationId/servers/$serverId/backups");
     }
@@ -220,7 +223,7 @@ final class ThgHostingClient
         int $serverId,
         int $backupId,
         string $note
-    ) {
+    ): array {
 
         return $this->request(
             self::POST,
@@ -231,27 +234,27 @@ final class ThgHostingClient
         );
     }
 
-    public function deleteSsdVpsBackup(int $locationId, int $serverId, int $backupId)
+    public function deleteSsdVpsBackup(int $locationId, int $serverId, int $backupId): array
     {
         return $this->request(self::DELETE, "ssd-vps/locations/$locationId/servers/$serverId/backups/$backupId");
     }
 
-    public function restoreSsdVpsBackup(int $locationId, int $serverId, int $backupId)
+    public function restoreSsdVpsBackup(int $locationId, int $serverId, int $backupId): array
     {
         return $this->request(self::GET, "ssd-vps/locations/$locationId/servers/$serverId/backups/$backupId/restore");
     }
 
-    public function getServiceDetails(int $serviceId)
+    public function getServiceDetails(int $serviceId): array
     {
         return $this->request(self::GET, "billing/services/$serviceId");
     }
 
-    public function getDnsZones()
+    public function getDnsZones(): array
     {
         return $this->request(self::GET, "dns-zones");
     }
 
-    public function createDnsZone(string $domainName, string $ip)
+    public function createDnsZone(string $domainName, string $ip): array
     {
         $params = [
             "domain_name" => $domainName,
@@ -260,12 +263,12 @@ final class ThgHostingClient
         return $this->request(self::POST, "dns-zones", $params);
     }
 
-    public function getDnsZoneDetails(int $zoneId)
+    public function getDnsZoneDetails(int $zoneId): array
     {
         return $this->request(self::GET, "dns-zones" . $zoneId);
     }
 
-    public function deleteDnsZone(int $zoneId)
+    public function deleteDnsZone(int $zoneId): array
     {
         return $this->request(self::DELETE, "dns-zones" . $zoneId);
     }
@@ -281,7 +284,7 @@ final class ThgHostingClient
         ?int $port = null,
         ?int $weight = null,
         ?int $mxPriority = null
-    ) {
+    ): array {
         $params = [
             "type"   => $type,
             "host"   => $host,
@@ -326,7 +329,7 @@ final class ThgHostingClient
         ?int $port = null,
         ?int $weight = null,
         ?int $mxPriority = null
-    ) {
+    ): array {
         $params = [
             "type"   => $type,
             "host"   => $host,
@@ -359,17 +362,24 @@ final class ThgHostingClient
         );
     }
 
-    public function getServers()
+    public function deleteDnsZoneRecord(
+        int $zoneId,
+        int $recordId
+    ): array {
+        return $this->request(self::DELETE, "dns-zones/$zoneId/records/$recordId");
+    }
+
+    public function getServers(): array
     {
         return $this->request(self::GET, "servers");
     }
 
-    public function getServerDetails(int $serverId)
+    public function getServerDetails(int $serverId): array
     {
         return $this->request(self::GET, "servers/$serverId");
     }
 
-    public function getServerBandwidthGraph(int $serverId, string $periodStart = null, string $periodEnd = null)
+    public function getServerBandwidthGraph(int $serverId, string $periodStart = null, string $periodEnd = null): array
     {
         $params = [];
 
@@ -384,7 +394,7 @@ final class ThgHostingClient
         return $this->request(self::GET, "servers/$serverId/bandwidth-graph", $params);
     }
 
-    public function getTickets()
+    public function getTickets(): array
     {
         return $this->request(self::GET, "tickets");
     }
@@ -396,7 +406,7 @@ final class ThgHostingClient
         int $department = 0,
         int $priority = 0,
         array $attachments = []
-    ) {
+    ): array {
         $params = [
             "body" => $body,
             "subject" => $subject,
@@ -406,17 +416,17 @@ final class ThgHostingClient
         return $this->request(self::POST, "tickets", $params, $attachments);
     }
 
-    public function getTicketQueuesByDepartment()
+    public function getTicketDepartments(): array
     {
         return $this->request(self::GET, "tickets/queues");
     }
 
-    public function getTicketDetails(int $ticketId)
+    public function getTicketDetails(int $ticketId): array
     {
         return $this->request(self::GET, "tickets/" . $ticketId);
     }
 
-    public function updateTicket(int $ticketId, int $priority = 0, bool $closeTicket = false)
+    public function updateTicket(int $ticketId, int $priority = 0, bool $closeTicket = false): array
     {
         $params = [
             "priority" => $priority
@@ -429,7 +439,7 @@ final class ThgHostingClient
         return $this->request(self::PUT, "tickets/" . $ticketId, $params);
     }
 
-    public function addReplyToTicket(int $ticketId, string $body, array $attachments = [])
+    public function addReplyToTicket(int $ticketId, string $body, array $attachments = []): array
     {
         return $this->request(
             self::POST,
@@ -441,42 +451,42 @@ final class ThgHostingClient
         );
     }
 
-    public function getStatusUpdates()
+    public function getStatusUpdates(): array
     {
         return $this->request(self::GET, "status-updates");
     }
 
-    public function getDatacenters()
+    public function getDatacenters(): array
     {
         return $this->request(self::GET, "orders/locations");
     }
 
-    public function getProductCategory()
+    public function getProductCategory(): array
     {
         return $this->request(self::GET, "orders/categories");
     }
 
-    public function getProductsInCategory(int $locationId, int $categoryId)
+    public function getProductsInCategory(int $locationId, int $categoryId): array
     {
         return $this->request(self::GET, "orders/locations/$locationId/categories/$categoryId/products");
     }
 
-    public function getProductDetails(int $locationId, int $categoryId, int $productId)
+    public function getProductDetails(int $locationId, int $categoryId, int $productId): array
     {
         return $this->request(self::GET, "orders/locations/$locationId/categories/$categoryId/products/$productId");
     }
 
-    public function getCalculatedPriceWithTax(array $body)
+    public function getCalculatedPriceWithTax(array $body): array
     {
         return $this->request(self::POST, "orders/tax", ["body" => $body]);
     }
 
-    public function getPaymentMethods()
+    public function getPaymentMethods(): array
     {
         return $this->request(self::GET, "orders/payment-methods");
     }
 
-    public function submitOrderForProcessing(array $body)
+    public function submitOrderForProcessing(array $body): array
     {
         return $this->request(self::POST, "orders", ["body" => $body]);
     }
