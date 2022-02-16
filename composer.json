@@ -1,0 +1,16 @@
+{
+    "name": "thg/thg-client",
+    "description": "THG Open API client",
+    "type": "library",
+    "license": "GNU General Public License v2.0",
+    "autoload": {
+        "psr-4": {
+            "Thg\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4.0",
+        "ext-curl": "*"
+    }
+}
