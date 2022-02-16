@@ -35,15 +35,15 @@ PHP Client for easier use of Open API
 
 ```php
     $thgHostingClient->createSsdVpsServer(
-        int $locationId,                  // ID of the SSD VPS Location (see “Get SSD VPS Locations”)
-        string $label,                    // Label for the new SSD VPS Server
-        string $hostname,                 // Hostname for the new SSD VPS Server
-        string $password,                 // Password for the new SSD VPS Server
-        int $servicePlanId,               // ID of the chosen SSD VPS plan (see “Get SSD VPS Plans”)
+        int     $locationId,              // ID of the SSD VPS Location (see “Get SSD VPS Locations”)
+        string  $label,                   // Label for the new SSD VPS Server
+        string  $hostname,                // Hostname for the new SSD VPS Server
+        string  $password,                // Password for the new SSD VPS Server
+        int     $servicePlanId,           // ID of the chosen SSD VPS plan (see “Get SSD VPS Plans”)
         ?string $osComponentCode = null,  // Optional; Component code of the SSD VPS operating system (see “Get SSD VPS Operating Systems”) (you have to pass either os_component_code or custom_template_id)
-        ?bool $backups = null,            // Optional; If passed, server will be created with Backup Protection
-        ?bool $billHourly = null,         // Optional; If passed billing will be set hourly, otherwise monthly billing will be used
-        ?int $customTemplateId = null     // Optional; Pass here the Template ID of Custom OS (see “Get Custom OSes for SSD VPS”) (you have to pass either os_component_code or custom_template_id)
+        ?bool   $backups = null,          // Optional; If passed, server will be created with Backup Protection
+        ?bool   $billHourly = null,       // Optional; If passed billing will be set hourly, otherwise monthly billing will be used
+        ?int    $customTemplateId = null  // Optional; Pass here the Template ID of Custom OS (see “Get Custom OSes for SSD VPS”) (you have to pass either os_component_code or custom_template_id)
     );
 ```
 
@@ -140,8 +140,8 @@ PHP Client for easier use of Open API
 
 ```php
     $thgHostingClient->resetSsdVpsServerPassword(
-        int $locationId,            // ID of the SSD VPS Location (see “Get SSD VPS Locations”)
-        int $serverId,              // ID of the SSD VPS Server
+        int     $locationId,        // ID of the SSD VPS Location (see “Get SSD VPS Locations”)
+        int     $serverId,          // ID of the SSD VPS Server
         ?string $newPassword = null // Root password to set. Must be between 6 and 32 characters and valid for the OS of the target virtual machine.
     );
 ```
@@ -161,10 +161,10 @@ PHP Client for easier use of Open API
 
 ```php
     $thgHostingClient->addSsdVpsBackupNote(
-        int $locationId, // ID of the SSD VPS Location (see “Get SSD VPS Locations”)
-        int $serverId,   // ID of the SSD VPS Server
-        int $backupId,   // ID of the SSD VPS Backup (see “Get SSD VPS Server Backups”)
-        string $note     // Note
+        int    $locationId, // ID of the SSD VPS Location (see “Get SSD VPS Locations”)
+        int    $serverId,   // ID of the SSD VPS Server
+        int    $backupId,   // ID of the SSD VPS Backup (see “Get SSD VPS Server Backups”)
+        string $note        // Note
     );
 ```
 
@@ -239,16 +239,16 @@ PHP Client for easier use of Open API
 
 ```php
     $thgHostingClient->addRecordToDnsZone(
-        int $zoneId,              // ID of the DNS Zone (see “Get DNS Zones”)
-        string $type,             // Zone type (A / AAAA etc.)
-        string $host,             // Host name or IP address
-        string $content,          // Content depending on the zone type, example: mail.hostname.com
-        int $ttl,                 // Time to live - the added record or time to ping/fetch the updated records
-        ?string $service = null,  // The symbolic name of the desired service. (only when record type SRV)
-        ?string $protocol = null, // The transport protocol of the desired service. (only when record type SRV)
-        ?int $port = null,        // The TCP or UDP port on which the service is to be found. (only when record type SRV)
-        ?int $weight = null,      // A relative weight for records with the same priority, higher value means higher chance of getting picked. (only when record type SRV)
-        ?int $mxPriority = null   // The priority of the target host, lower value means more preferred. (only when record type SRV or MX)
+        int     $zoneId            // ID of the DNS Zone (see “Get DNS Zones”)
+        string  $type,             // Zone type (A / AAAA etc.)
+        string  $host,             // Host name or IP address
+        string  $content,          // Content depending on the zone type, example: mail.hostname.com
+        int     $ttl,              // Time to live - the added record or time to ping/fetch the updated records
+        ?string $service = null,   // The symbolic name of the desired service. (only when record type SRV)
+        ?string $protocol = null,  // The transport protocol of the desired service. (only when record type SRV)
+        ?int    $port = null,      // The TCP or UDP port on which the service is to be found. (only when record type SRV)
+        ?int    $weight = null,    // A relative weight for records with the same priority, higher value means higher chance of getting picked. (only when record type SRV)
+        ?int    $mxPriority = null // The priority of the target host, lower value means more preferred. (only when record type SRV or MX)
     );
 ```
 
@@ -257,17 +257,17 @@ PHP Client for easier use of Open API
 
 ```php
     $thgHostingClient->updateDnsZoneRecord(
-        int $zoneId,              // ID of the DNS Zone (see “Get DNS Zones”)
-        int $recordId,            // ID of the DNS Zone record (see “Get DNS Zone Details”)
-        string $type,             // Zone type (A / AAAA etc.)
-        string $host,             // Host name or IP address
-        string $content,          // Content depending on the zone type, example: mail.hostname.com
-        int $ttl,                 // Time to live - the added record or time to ping/fetch the updated records
-        ?string $service = null,  // The symbolic name of the desired service. (only when record type SRV)
-        ?string $protocol = null, // The transport protocol of the desired service. (only when record type SRV)
-        ?int $port = null,        // The TCP or UDP port on which the service is to be found. (only when record type SRV)
-        ?int $weight = null,      // A relative weight for records with the same priority, higher value means higher chance of getting picked. (only when record type SRV)
-        ?int $mxPriority = null   // The priority of the target host, lower value means more preferred. (only when record type SRV or MX)
+        int     $zoneId,           // ID of the DNS Zone (see “Get DNS Zones”)
+        int     $recordId,         // ID of the DNS Zone record (see “Get DNS Zone Details”)
+        string  $type,             // Zone type (A / AAAA etc.)
+        string  $host,             // Host name or IP address
+        string  $content,          // Content depending on the zone type, example: mail.hostname.com
+        int     $ttl,              // Time to live - the added record or time to ping/fetch the updated records
+        ?string $service = null,   // The symbolic name of the desired service. (only when record type SRV)
+        ?string $protocol = null,  // The transport protocol of the desired service. (only when record type SRV)
+        ?int    $port = null,      // The TCP or UDP port on which the service is to be found. (only when record type SRV)
+        ?int    $weight = null,    // A relative weight for records with the same priority, higher value means higher chance of getting picked. (only when record type SRV)
+        ?int    $mxPriority = null // The priority of the target host, lower value means more preferred. (only when record type SRV or MX)
     );
 ```
 
@@ -302,7 +302,7 @@ PHP Client for easier use of Open API
 
 ```php
     $thgHostingClient->getServerBandwidthGraph(
-        int $serverId,              // ID of the Server (see “Get Servers”)
+        int    $serverId,           // ID of the Server (see “Get Servers”)
         string $periodStart = null, // Optional. And RFC3339/ISO8601 date-time string representing the start of period of the dataset. Defaults to the start of today.
         string $periodEnd = null    // Optional. And RFC3339/ISO8601 date-time string representing the end of period of the dataset. Defaults to one month before the start of today
     );
@@ -320,11 +320,11 @@ PHP Client for easier use of Open API
 
 ```php
     $thgHostingClient->createTicket(
-        string $body,           // Ticket body
-        string $subject,        // Subject
-        int $department = 0,    // Ticket Department - Default: 0 (General)
-        int $priority = 0,      // Priority of a Ticket (Default: 0 = Low, 1= Normal, 2 = High, 3 = Urgent)
-        array $attachments = [] // Can upload up to 2 - passed as an array, example: attachments[0] = file
+        string $body,            // Ticket body
+        string $subject,         // Subject
+        int    $department = 0,  // Ticket Department - Default: 0 (General)
+        int    $priority = 0,    // Priority of a Ticket (Default: 0 = Low, 1= Normal, 2 = High, 3 = Urgent)
+        array  $attachments = [] // Can upload up to 2 - passed as an array, example: attachments[0] = file
     );
 ```
 
@@ -349,8 +349,8 @@ PHP Client for easier use of Open API
 
 ```php
     $thgHostingClient->updateTicket(
-        int $ticketId,            // ID of the ticket (see “Get Tickets”)
-        int $priority = 0,        // Set to ‘close’ to close this ticket - only ‘close’ accepted
+        int  $ticketId,           // ID of the ticket (see “Get Tickets”)
+        int  $priority = 0,       // Set to ‘close’ to close this ticket - only ‘close’ accepted
         bool $closeTicket = false // Priority of a Ticket (Default: 0 = Low, 1= Normal, 2 = High, 3 = Urgent)
     );
 ```
@@ -360,9 +360,9 @@ PHP Client for easier use of Open API
 
 ```php
     $thgHostingClient->addReplyToTicket(
-        int $ticketId,          // ID of the ticket (see “Get Tickets”)
-        string $body,           // Ticket body
-        array $attachments = [] // Can upload up to 2 - passed as an array, example: attachments[0] = file
+        int    $ticketId,        // ID of the ticket (see “Get Tickets”)
+        string $body,            // Ticket body
+        array  $attachments = [] // Can upload up to 2 - passed as an array, example: attachments[0] = file
     );
 ```
 
