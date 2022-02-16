@@ -241,4 +241,122 @@ final class ThgHostingClient
         return $this->request(self::GET, "ssd-vps/locations/$locationId/servers/$serverId/backups/$backupId/restore");
     }
 
+    public function getServiceDetails(int $serviceId)
+    {
+        return $this->request(self::GET, "billing/services/$serviceId");
+    }
+
+    public function getDnsZones()
+    {
+        return $this->request(self::GET, "dns-zones");
+    }
+
+    public function createDnsZone(string $domainName, string $ip)
+    {
+        $params = [
+            "domain_name" => $domainName,
+            "ip" => $ip
+        ];
+        return $this->request(self::POST, "dns-zones", $params);
+    }
+
+    public function getDnsZoneDetails(int $zoneId)
+    {
+        return $this->request(self::GET, "dns-zones" . $zoneId);
+    }
+
+    public function deleteDnsZone(int $zoneId)
+    {
+        return $this->request(self::DELETE, "dns-zones" . $zoneId);
+    }
+
+    public function addRecordToDnsZone(
+        int $zoneId,
+        string $type,
+        string $host,
+        string $content,
+        int $ttl,
+        ?string $service = null,
+        ?string $protocol = null,
+        ?int $port = null,
+        ?int $weight = null,
+        ?int $mxPriority = null
+    ) {
+        $params = [
+            "type"   => $type,
+            "host"   => $host,
+            "contet" => $content,
+            "ttl"    => $ttl
+        ];
+
+        if (!\is_null($service)) {
+            $params["service"] = $service;
+        }
+
+        if (!\is_null($protocol)) {
+            $params["protocol"] = $protocol;
+        }
+
+        if (!\is_null($port)) {
+            $params["port"] = $port;
+        }
+
+        if (!\is_null($weight)) {
+            $params["weight"] = $weight;
+        }
+
+        if (!\is_null($mxPriority)) {
+            $params["mx_priority"] = $mxPriority;
+        }
+
+        return $this->request(
+            self::POST, "dns-zones/$zoneId/records", $params
+        );
+    }
+
+    public function updateDnsZoneRecord(
+        int $zoneId,
+        int $recordId,
+        string $type,
+        string $host,
+        string $content,
+        int $ttl,
+        ?string $service = null,
+        ?string $protocol = null,
+        ?int $port = null,
+        ?int $weight = null,
+        ?int $mxPriority = null
+    ) {
+        $params = [
+            "type"   => $type,
+            "host"   => $host,
+            "contet" => $content,
+            "ttl"    => $ttl
+        ];
+
+        if (!\is_null($service)) {
+            $params["service"] = $service;
+        }
+
+        if (!\is_null($protocol)) {
+            $params["protocol"] = $protocol;
+        }
+
+        if (!\is_null($port)) {
+            $params["port"] = $port;
+        }
+
+        if (!\is_null($weight)) {
+            $params["weight"] = $weight;
+        }
+
+        if (!\is_null($mxPriority)) {
+            $params["mx_priority"] = $mxPriority;
+        }
+
+        return $this->request(
+            self::PUT, "dns-zones/$zoneId/records/$recordId", $params
+        );
+    }
+
 }
