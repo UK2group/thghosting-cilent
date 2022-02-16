@@ -446,4 +446,39 @@ final class ThgHostingClient
         return $this->request(self::GET, "status-updates");
     }
 
+    public function getDatacenters()
+    {
+        return $this->request(self::GET, "orders/locations");
+    }
+
+    public function getProductCategory()
+    {
+        return $this->request(self::GET, "orders/categories");
+    }
+
+    public function getProductsInCategory(int $locationId, int $categoryId)
+    {
+        return $this->request(self::GET, "orders/locations/$locationId/categories/$categoryId/products");
+    }
+
+    public function getProductDetails(int $locationId, int $categoryId, int $productId)
+    {
+        return $this->request(self::GET, "orders/locations/$locationId/categories/$categoryId/products/$productId");
+    }
+
+    public function getCalculatedPriceWithTax(array $body)
+    {
+        return $this->request(self::POST, "orders/tax", ["body" => $body]);
+    }
+
+    public function getPaymentMethods()
+    {
+        return $this->request(self::GET, "orders/payment-methods");
+    }
+
+    public function submitOrderForProcessing(array $body)
+    {
+        return $this->request(self::POST, "orders", ["body" => $body]);
+    }
+
 }
