@@ -57,7 +57,7 @@ final class ThgHostingClient
      * @param  array        $arguments Optional; Arguments to addtionally send
      * @return string|array            Result of request
      */
-    public function request(string $method, string $endpoint, array $arguments = [])
+    public function request(string $method, string $endpoint, array $arguments = [], array $files = [])
     {
         if (!$this->validateMethod($method)) {
             throw new ThgException("Not allowed method used. Allowed: " . implode(', ', array_keys($allowedMethods)), 405);
@@ -357,6 +357,93 @@ final class ThgHostingClient
         return $this->request(
             self::PUT, "dns-zones/$zoneId/records/$recordId", $params
         );
+    }
+
+    public function getServers()
+    {
+        return $this->request(self::GET, "servers");
+    }
+
+    public function getServerDetails(int $serverId)
+    {
+        return $this->request(self::GET, "servers/$serverId");
+    }
+
+    public function getServerBandwidthGraph(int $serverId, string $periodStart = null, string $periodEnd = null)
+    {
+        $params = [];
+
+        if (!\is_null($periodStart)) {
+            $params["period_start"] = $periodStart;
+        }
+
+        if (!\is_null($periodEnd)) {
+            $params["period_end"] = $periodEnd;
+        }
+
+        return $this->request(self::GET, "servers/$serverId/bandwidth-graph", $params);
+    }
+
+    public function getTickets()
+    {
+        return $this->request(self::GET, "tickets");
+    }
+
+    // @TODO test attachments - how it should be uploaded and in what format
+    public function createTicket(
+        string $body,
+        string $subject,
+        int $department = 0,
+        int $priority = 0,
+        array $attachments = []
+    ) {
+        $params = [
+            "body" => $body,
+            "subject" => $subject,
+            "department" => $department,
+            "priority" => $priority
+        ];
+        return $this->request(self::POST, "tickets", $params, $attachments);
+    }
+
+    public function getTicketQueuesByDepartment()
+    {
+        return $this->request(self::GET, "tickets/queues");
+    }
+
+    public function getTicketDetails(int $ticketId)
+    {
+        return $this->request(self::GET, "tickets/" . $ticketId);
+    }
+
+    public function updateTicket(int $ticketId, int $priority = 0, bool $closeTicket = false)
+    {
+        $params = [
+            "priority" => $priority
+        ];
+
+        if ($closeTicket) {
+            $params["status"] = "close";
+        }
+
+        return $this->request(self::PUT, "tickets/" . $ticketId, $params);
+    }
+
+    public function addReplyToTicket(int $ticketId, string $body, array $attachments = [])
+    {
+        return $this->request(
+            self::POST,
+            "tickets/" . $ticketId,
+            [
+                "body" => $body
+            ],
+            $attachments
+        );
+    }
+
+    public function getStatusUpdates()
+    {
+        return $this->request(self::GET, "status-updates");
     }
 
 }
