@@ -7,6 +7,18 @@ PHP Client for easier use of Open API
 
 # Methods
 
+## Request
+*Creates custom request to chosen EP.*
+
+```php
+    $thgHostingClient->request(
+        string $method,         // Allowed methods: GET, POST, DELETE, PUT, PATCH
+        string $endpoint,       // Path to chosen EP for example: "ssd-vps/plans"
+        array $arguments = [],  // Body of request
+        array $files     = []   // Files to send with request
+    );
+```
+
 ## Get SSD VPS Plans
 *Returns SSD VPS Plans with net price in USD.*
 
