@@ -15,9 +15,9 @@ use ThgException;
 /**
  * THG Hosting API Client
  */
-final class ThgHostingClient
+class ThgHostingClient
 {
-    private $host = 'https://api.thghosting.com/rest-api/';
+    protected $host = 'https://api.thghosting.com/rest-api/';
     public const GET    = "GET";
     public const POST   = "POST";
     public const DELETE = "DELETE";
