@@ -1,7 +1,8 @@
 <?php
     require_once '../vendor/autoload.php';
+    $_ENV = require './keys/env.php';
     try {
-        $client = new ThgHosting\ThgHostingClient('vLkSowsBe2IsF0UkGTyneKzBjEO8zssnuUkG2MeliD8ufIuhkkazPPbvSb076u2r');
+        $client = new ThgHosting\ThgHostingClient($_ENV['X-Api-Token']);
         $res = $client->request('GET', 'ssd-vps/locations/19/templates/custom/');
         var_dump($res);
     } catch (\Throwable $e) {
