@@ -23,6 +23,8 @@ class ThgHostingClient
     public const DELETE = "DELETE";
     public const PUT    = "PUT";
     public const PATCH  = "PATCH";
+    PUBLIC CONST CONTENT_JSON = 'application/json';
+    PUBLIC CONST CONTENT_MULTIPART = 'multipart/form-data';
     private $timeout = 60;
     private $allowedMethods = [
         self::GET    => [CURLOPT_CUSTOMREQUEST, self::GET   ],
@@ -57,8 +59,13 @@ class ThgHostingClient
      * @param  array        $arguments Optional; Arguments to addtionally send
      * @return string|array            Result of request
      */
-    public function request(string $method, string $endpoint, array $arguments = [], array $files = []): array
-    {
+    public function request(
+        string $method,
+        string $endpoint,
+        array $arguments = [],
+        array $files = [],
+        string $contentType = self::CONTENT_JSON
+    ): array {
         if (!$this->validateMethod($method)) {
             throw new ThgException("Not allowed method used. Allowed: " . implode(', ', array_keys($allowedMethods)), 405);
         }
@@ -73,7 +80,7 @@ class ThgHostingClient
         curl_setopt($curl, ...$requestParams);
         curl_setopt($curl, CURLOPT_HTTPHEADER, [
             "X-Api-Token: " . $this->xApiToken,
-            "Content-type: application/x-www-form-urlencoded",
+            "Content-type: application/json",
             "Accept: application/json"
         ]);
 
@@ -83,7 +90,7 @@ class ThgHostingClient
             $query = http_build_query($arguments);
             $url .= "?" . $query;
         } else {
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $arguments);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($arguments));
         }
 
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -265,12 +272,12 @@ class ThgHostingClient
 
     public function getDnsZoneDetails(int $zoneId): array
     {
-        return $this->request(self::GET, "dns-zones" . $zoneId);
+        return $this->request(self::GET, "dns-zones/" . $zoneId);
     }
 
     public function deleteDnsZone(int $zoneId): array
     {
-        return $this->request(self::DELETE, "dns-zones" . $zoneId);
+        return $this->request(self::DELETE, "dns-zones/" . $zoneId);
     }
 
     public function addRecordToDnsZone(
@@ -283,12 +290,12 @@ class ThgHostingClient
         ?string $protocol = null,
         ?int $port = null,
         ?int $weight = null,
-        ?int $mxPriority = null
+        ?bool $mxPriority = null
     ): array {
         $params = [
             "type"   => $type,
             "host"   => $host,
-            "contet" => $content,
+            "content" => $content,
             "ttl"    => $ttl
         ];
 
@@ -297,7 +304,7 @@ class ThgHostingClient
         }
 
         if (!\is_null($protocol)) {
-            $params["protocol"] = $protocol;
+            $params["protocol"] = strtolower($protocol);
         }
 
         if (!\is_null($port)) {
@@ -478,7 +485,7 @@ class ThgHostingClient
 
     public function getCalculatedPriceWithTax(array $body): array
     {
-        return $this->request(self::POST, "orders/tax", ["body" => $body]);
+        return $this->request(self::POST, "orders/tax", $body);
     }
 
     public function getPaymentMethods(): array
@@ -488,7 +495,7 @@ class ThgHostingClient
 
     public function submitOrderForProcessing(array $body): array
     {
-        return $this->request(self::POST, "orders", ["body" => $body]);
+        return $this->request(self::POST, "orders", $body);
     }
 
 }

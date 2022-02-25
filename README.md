@@ -451,7 +451,7 @@ PHP Client for easier use of Open API
 
 ```php
     $body = [
-        "order": [
+        "order" => [
             [
               "product_id" => 265,
               "quantity" => 1,

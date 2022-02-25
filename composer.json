@@ -8,9 +8,8 @@
             "ThgHosting\\": "src/"
         }
     },
-    "minimum-stability": "dev",
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=7.2.34",
         "ext-curl": "*"
     }
 }
