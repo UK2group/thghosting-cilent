@@ -15,7 +15,17 @@ PHP Client for easier use of Open API
         string $method,         // Allowed methods: GET, POST, DELETE, PUT, PATCH
         string $endpoint,       // Path to chosen EP for example: "ssd-vps/plans"
         array $arguments = [],  // Body of request
-        array $files     = []   // Files to send with request
+        array $files     = [    // Files to send with request
+            [
+                // Mime type of file
+                "mime" => "image/png",
+                // Name of file
+                "name" => "file.png",
+                // Base64 encoded file
+                "file" => "iVBORw0KGgoAAAANSUhEUgAAAIIAAABzCAYAAABUzdpBAAAIj0lEQVR4Xu2deVRVVRTGP0IN0QRRc8JQ0yy1XI7ZynRlTmmmYCUSKFm4HFFzKUY4g6VMag6..."
+            ],
+            "/path/to/file.pdf" // Absolute path to file
+        ]
     );
 ```
 
@@ -271,7 +281,6 @@ PHP Client for easier use of Open API
     $thgHostingClient->updateDnsZoneRecord(
         int     $zoneId,            // ID of the DNS Zone (see “Get DNS Zones”)
         int     $recordId,          // ID of the DNS Zone record (see “Get DNS Zone Details”)
-        string  $type,              // Zone type (A / AAAA etc.)
         string  $host,              // Host name or IP address
         string  $content,           // Content depending on the zone type, example: mail.hostname.com
         int     $ttl,               // Time to live - the added record or time to ping/fetch the updated records
@@ -287,7 +296,7 @@ PHP Client for easier use of Open API
 *Remove a DNS record.*
 
 ```php
-    $thgHostingClient->eleteDnsZoneRecord(
+    $thgHostingClient->deleteDnsZoneRecord(
         int $zoneId,  // ID of the DNS Zone (see “Get DNS Zones”)
         int $recordId // ID of the DNS Zone record
     );
@@ -336,7 +345,7 @@ PHP Client for easier use of Open API
         string $subject,         // Subject
         int    $department  = 0, // Ticket Department - Default: 0 (General)
         int    $priority    = 0, // Priority of a Ticket (Default: 0 = Low, 1= Normal, 2 = High, 3 = Urgent)
-        array  $attachments = [] // Can upload up to 2 - passed as an array, example: attachments[0] = file
+        array  $attachments = [] // How to attach files you can find described in `request` method
     );
 ```
 
@@ -362,8 +371,8 @@ PHP Client for easier use of Open API
 ```php
     $thgHostingClient->updateTicket(
         int  $ticketId,           // ID of the ticket (see “Get Tickets”)
-        int  $priority    = 0,    // Set to ‘close’ to close this ticket - only ‘close’ accepted
-        bool $closeTicket = false // Priority of a Ticket (Default: 0 = Low, 1= Normal, 2 = High, 3 = Urgent)
+        int  $priority    = 0,    // Priority of a Ticket (Default: 0 = Low, 1= Normal, 2 = High, 3 = Urgent)
+        bool $closeTicket = false // Set to true will close the ticket 
     );
 ```
 
@@ -374,7 +383,7 @@ PHP Client for easier use of Open API
     $thgHostingClient->addReplyToTicket(
         int    $ticketId,        // ID of the ticket (see “Get Tickets”)
         string $body,            // Ticket body
-        array  $attachments = [] // Can upload up to 2 - passed as an array, example: attachments[0] = file
+        array  $attachments = [] // How to attach files you can find described in `request` method
     );
 ```
 
@@ -426,12 +435,18 @@ PHP Client for easier use of Open API
 ```php
     $body = [
         [
-            "product_id" => 265,
-            "quantity" => 1,
-            "price" => 354.9,
+            "product_id"    => 265,
+            "quantity"      => 1,
+            "price"         => 354.9,
             "datacenter_id" => 12,
-            "duration_id" => 2,
-            "addons" => []
+            "duration_id"   => 2,
+            "addons"        => [
+                [
+                    "addon_id"        => 4,
+                    "selected_option" => 2,
+                    "price"           => 10
+                ]
+            ]
         ]
     ];
     $thgHostingClient->getCalculatedPriceWithTax(
@@ -451,17 +466,31 @@ PHP Client for easier use of Open API
 
 ```php
     $body = [
-        "order": [
+        "order" => [
             [
-              "product_id" => 265,
-              "quantity" => 1,
-              "price" => 354.9,
-              "datacenter_id" => 12,
-              "duration_id" => 2,
-              "addons" => []
+                "category_id" => 2,
+                "product_id" => 265,
+                "quantity" => 1,
+                "price" => 354.9,
+                "datacenter_id" => 12,
+                "duration_id" => 2,
+                "addons" => [],
+                "sales_tax" => 0
             ]
         ],
-        "paymentMethodId" => 21
+        "paymentMethodId" => 21,
+        "contact_data" => [
+        	"address" => "816 Address",
+        	"city"  => "city",
+        	"company" => "Company",
+        	"country" => "US",
+        	"county" => "County 1",
+        	"email" => "mail@mail.com",
+        	"first_name" => "John",
+        	"last_name" => "Doe",
+        	"phone" => "+44 11 2222 3333",
+        	"postcode" => "12345"
+        ]
     ];
     $thgHostingClient->submitOrderForProcessing(
         array $body

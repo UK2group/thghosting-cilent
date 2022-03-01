@@ -15,15 +15,17 @@ use ThgException;
 /**
  * THG Hosting API Client
  */
-final class ThgHostingClient
+class ThgHostingClient
 {
-    private $host = 'https://api.thghosting.com/rest-api/';
+    protected $host = 'https://api.thghosting.com/rest-api/';
     public const GET    = "GET";
     public const POST   = "POST";
     public const DELETE = "DELETE";
     public const PUT    = "PUT";
     public const PATCH  = "PATCH";
-    private $timeout = 60;
+    PUBLIC CONST CONTENT_JSON = 'application/json';
+    PUBLIC CONST CONTENT_MULTIPART = 'multipart/form-data';
+    private $timeout = 10;
     private $allowedMethods = [
         self::GET    => [CURLOPT_CUSTOMREQUEST, self::GET   ],
         self::POST   => [CURLOPT_CUSTOMREQUEST, self::POST  ],
@@ -57,13 +59,23 @@ final class ThgHostingClient
      * @param  array        $arguments Optional; Arguments to addtionally send
      * @return string|array            Result of request
      */
-    public function request(string $method, string $endpoint, array $arguments = [], array $files = []): array
-    {
+    public function request(
+        string $method,
+        string $endpoint,
+        array $arguments = [],
+        array $files = [],
+        string $contentType = self::CONTENT_JSON
+    ): array {
         if (!$this->validateMethod($method)) {
             throw new ThgException("Not allowed method used. Allowed: " . implode(', ', array_keys($allowedMethods)), 405);
         }
 
         $requestParams = $this->allowedMethods[$method];
+        $headers = [
+            "X-Api-Token: " . $this->xApiToken,
+            "Content-Type: " . $contentType,
+            "Accept: application/json"
+        ];
         $curl = curl_init();
 
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
@@ -71,27 +83,63 @@ final class ThgHostingClient
         curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, TRUE);
         curl_setopt($curl, ...$requestParams);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, [
-            "X-Api-Token: " . $this->xApiToken,
-            "Content-type: application/x-www-form-urlencoded",
-            "Accept: application/json"
-        ]);
 
         $url = $this->host . trim($endpoint, '/') . '/';
 
-        if ($method === self::GET && \sizeof($arguments) > 0) {
-            $query = http_build_query($arguments);
-            $url .= "?" . $query;
-        } else {
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $arguments);
+        if (\sizeof($files) > 0) {
+            $arguments['attachments'] = [];
+            foreach ($files as $file) {
+                // Path to the file
+                if (\is_string($file) && \is_file($file)) {
+                    $stream = file_get_contents($file);
+                    $arguments['attachments'][] = [
+                        "file" => base64_encode($stream),
+                        "mime"    => mime_content_type($file),
+                        "name"   => basename($file)
+                    ];
+                    continue;
+                }
+                // File encoded in base64 with all required informations
+                if (\is_array($file)) {
+                    if (!isset($file["file"])) {
+                        throw new ThgHostingException("File encoded into base64 was not found", 404);
+                    }
+
+                    if (!isset($file["name"])) {
+                        throw new ThgHostingException("Name of the file was not found", 404);
+                    }
+
+                    if (!isset($file["mime"])) {
+                        throw new ThgHostingException("Mime type of file was not found", 404);
+                    }
+
+                    $arguments['attachments'][] = [
+                        "file" => $file["file"],
+                        "mime"    => $file["mime"],
+                        "name"   => $file["name"]
+                    ];
+                    continue;
+                }
+
+                throw new ThgHostingException("Passed file wasn't a path or a stream, couldn't be send - cancelling request.", 400);
+            }
         }
+
+        if ($method === self::GET && \sizeof($arguments) > 0) {
+            $url .= "?" . http_build_query($arguments);
+        } else {
+            $arguments = json_encode($arguments);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $arguments);
+            $headers[] = 'Content-Length: ' . strlen($arguments);
+        }
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
         curl_setopt($curl, CURLOPT_URL, $url);
         $result = curl_exec($curl);
         curl_close($curl);
 
         return [
-            "data" => json_decode($result, true) ?? $result,
+            "data" => gettype($result) == 'string' ? (json_decode($result, true) ?? $result) : $result,
             "info" => curl_getinfo($curl)
         ];
     }
@@ -224,7 +272,6 @@ final class ThgHostingClient
         int $backupId,
         string $note
     ): array {
-
         return $this->request(
             self::POST,
             "ssd-vps/locations/$locationId/servers/$serverId/backups/$backupId/note",
@@ -241,7 +288,7 @@ final class ThgHostingClient
 
     public function restoreSsdVpsBackup(int $locationId, int $serverId, int $backupId): array
     {
-        return $this->request(self::GET, "ssd-vps/locations/$locationId/servers/$serverId/backups/$backupId/restore");
+        return $this->request(self::POST, "ssd-vps/locations/$locationId/servers/$serverId/backups/$backupId/restore");
     }
 
     public function getServiceDetails(int $serviceId): array
@@ -265,12 +312,12 @@ final class ThgHostingClient
 
     public function getDnsZoneDetails(int $zoneId): array
     {
-        return $this->request(self::GET, "dns-zones" . $zoneId);
+        return $this->request(self::GET, "dns-zones/" . $zoneId);
     }
 
     public function deleteDnsZone(int $zoneId): array
     {
-        return $this->request(self::DELETE, "dns-zones" . $zoneId);
+        return $this->request(self::DELETE, "dns-zones/" . $zoneId);
     }
 
     public function addRecordToDnsZone(
@@ -288,7 +335,7 @@ final class ThgHostingClient
         $params = [
             "type"   => $type,
             "host"   => $host,
-            "contet" => $content,
+            "content" => $content,
             "ttl"    => $ttl
         ];
 
@@ -297,7 +344,7 @@ final class ThgHostingClient
         }
 
         if (!\is_null($protocol)) {
-            $params["protocol"] = $protocol;
+            $params["protocol"] = strtolower($protocol);
         }
 
         if (!\is_null($port)) {
@@ -320,7 +367,6 @@ final class ThgHostingClient
     public function updateDnsZoneRecord(
         int $zoneId,
         int $recordId,
-        string $type,
         string $host,
         string $content,
         int $ttl,
@@ -331,9 +377,8 @@ final class ThgHostingClient
         ?int $mxPriority = null
     ): array {
         $params = [
-            "type"   => $type,
             "host"   => $host,
-            "contet" => $content,
+            "content" => $content,
             "ttl"    => $ttl
         ];
 
@@ -443,7 +488,7 @@ final class ThgHostingClient
     {
         return $this->request(
             self::POST,
-            "tickets/" . $ticketId,
+            "tickets/" . $ticketId . '/comments',
             [
                 "body" => $body
             ],
@@ -478,7 +523,7 @@ final class ThgHostingClient
 
     public function getCalculatedPriceWithTax(array $body): array
     {
-        return $this->request(self::POST, "orders/tax", ["body" => $body]);
+        return $this->request(self::POST, "orders/tax", $body);
     }
 
     public function getPaymentMethods(): array
@@ -488,7 +533,7 @@ final class ThgHostingClient
 
     public function submitOrderForProcessing(array $body): array
     {
-        return $this->request(self::POST, "orders", ["body" => $body]);
+        return $this->request(self::POST, "orders", $body);
     }
 
 }
