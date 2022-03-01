@@ -215,8 +215,8 @@
                 /* TICKET */
                 // $res = $client->testMethod('getTickets');
                 // $res = $client->testMethod('getTicketDepartments');
-                // $file1 = '/home/michal/Desktop/current7.png';
-                // $file2 = '/home/michal/Desktop/current6.png';
+                // $file1 = '';
+                // $file2 = '';
                 // $res = $client->testMethod('createTicket', [
                 //     'Body Open API client test',
                 //     'Open API client test',
@@ -241,7 +241,7 @@
                 // $res = $client->testMethod('addReplyToTicket', [
                 //     3765,
                 //     'Reply to Open API ticket',
-                //     ['/home/michal/Desktop/current7.png', '/home/michal/Desktop/current6.png']
+                //     ['', '']
                 // ]);
                 if (isset($res)) {
                     echo $res;
