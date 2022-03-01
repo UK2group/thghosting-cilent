@@ -5,6 +5,12 @@ PHP Client for easier use of Open API
     $thgHostingClient = new ThgHosting\ThgHostingClient($_ENV['X-Api-Token']);
 ```
 
+# Install
+
+```bash
+composer require thg/thg-client
+```
+
 # Methods
 
 ## Request
@@ -372,7 +378,7 @@ PHP Client for easier use of Open API
     $thgHostingClient->updateTicket(
         int  $ticketId,           // ID of the ticket (see “Get Tickets”)
         int  $priority    = 0,    // Priority of a Ticket (Default: 0 = Low, 1= Normal, 2 = High, 3 = Urgent)
-        bool $closeTicket = false // Set to true will close the ticket 
+        bool $closeTicket = false // Set to true will close the ticket
     );
 ```
 
