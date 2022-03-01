@@ -25,7 +25,7 @@ class ThgHostingClient
     public const PATCH  = "PATCH";
     PUBLIC CONST CONTENT_JSON = 'application/json';
     PUBLIC CONST CONTENT_MULTIPART = 'multipart/form-data';
-    private $timeout = 60;
+    private $timeout = 10;
     private $allowedMethods = [
         self::GET    => [CURLOPT_CUSTOMREQUEST, self::GET   ],
         self::POST   => [CURLOPT_CUSTOMREQUEST, self::POST  ],
@@ -71,6 +71,11 @@ class ThgHostingClient
         }
 
         $requestParams = $this->allowedMethods[$method];
+        $headers = [
+            "X-Api-Token: " . $this->xApiToken,
+            "Content-Type: " . $contentType,
+            "Accept: application/json"
+        ];
         $curl = curl_init();
 
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
@@ -78,27 +83,63 @@ class ThgHostingClient
         curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, TRUE);
         curl_setopt($curl, ...$requestParams);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, [
-            "X-Api-Token: " . $this->xApiToken,
-            "Content-type: application/json",
-            "Accept: application/json"
-        ]);
 
         $url = $this->host . trim($endpoint, '/') . '/';
 
-        if ($method === self::GET && \sizeof($arguments) > 0) {
-            $query = http_build_query($arguments);
-            $url .= "?" . $query;
-        } else {
-            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($arguments));
+        if (\sizeof($files) > 0) {
+            $arguments['attachments'] = [];
+            foreach ($files as $file) {
+                // Path to the file
+                if (\is_string($file) && \is_file($file)) {
+                    $stream = file_get_contents($file);
+                    $arguments['attachments'][] = [
+                        "file" => base64_encode($stream),
+                        "mime"    => mime_content_type($file),
+                        "name"   => basename($file)
+                    ];
+                    continue;
+                }
+                // File encoded in base64 with all required informations
+                if (\is_array($file)) {
+                    if (!isset($file["file"])) {
+                        throw new ThgHostingException("File encoded into base64 was not found", 404);
+                    }
+
+                    if (!isset($file["name"])) {
+                        throw new ThgHostingException("Name of the file was not found", 404);
+                    }
+
+                    if (!isset($file["mime"])) {
+                        throw new ThgHostingException("Mime type of file was not found", 404);
+                    }
+
+                    $arguments['attachments'][] = [
+                        "file" => $file["file"],
+                        "mime"    => $file["mime"],
+                        "name"   => $file["name"]
+                    ];
+                    continue;
+                }
+
+                throw new ThgHostingException("Passed file wasn't a path or a stream, couldn't be send - cancelling request.", 400);
+            }
         }
+
+        if ($method === self::GET && \sizeof($arguments) > 0) {
+            $url .= "?" . http_build_query($arguments);
+        } else {
+            $arguments = json_encode($arguments);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $arguments);
+            $headers[] = 'Content-Length: ' . strlen($arguments);
+        }
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
         curl_setopt($curl, CURLOPT_URL, $url);
         $result = curl_exec($curl);
         curl_close($curl);
 
         return [
-            "data" => json_decode($result, true) ?? $result,
+            "data" => gettype($result) == 'string' ? (json_decode($result, true) ?? $result) : $result,
             "info" => curl_getinfo($curl)
         ];
     }
@@ -231,7 +272,6 @@ class ThgHostingClient
         int $backupId,
         string $note
     ): array {
-
         return $this->request(
             self::POST,
             "ssd-vps/locations/$locationId/servers/$serverId/backups/$backupId/note",
@@ -248,7 +288,7 @@ class ThgHostingClient
 
     public function restoreSsdVpsBackup(int $locationId, int $serverId, int $backupId): array
     {
-        return $this->request(self::GET, "ssd-vps/locations/$locationId/servers/$serverId/backups/$backupId/restore");
+        return $this->request(self::POST, "ssd-vps/locations/$locationId/servers/$serverId/backups/$backupId/restore");
     }
 
     public function getServiceDetails(int $serviceId): array
@@ -290,7 +330,7 @@ class ThgHostingClient
         ?string $protocol = null,
         ?int $port = null,
         ?int $weight = null,
-        ?bool $mxPriority = null
+        ?int $mxPriority = null
     ): array {
         $params = [
             "type"   => $type,
@@ -327,7 +367,6 @@ class ThgHostingClient
     public function updateDnsZoneRecord(
         int $zoneId,
         int $recordId,
-        string $type,
         string $host,
         string $content,
         int $ttl,
@@ -338,9 +377,8 @@ class ThgHostingClient
         ?int $mxPriority = null
     ): array {
         $params = [
-            "type"   => $type,
             "host"   => $host,
-            "contet" => $content,
+            "content" => $content,
             "ttl"    => $ttl
         ];
 
@@ -450,7 +488,7 @@ class ThgHostingClient
     {
         return $this->request(
             self::POST,
-            "tickets/" . $ticketId,
+            "tickets/" . $ticketId . '/comments',
             [
                 "body" => $body
             ],

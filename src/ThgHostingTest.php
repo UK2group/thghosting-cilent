@@ -32,20 +32,26 @@ class ThgHostingTest extends ThgHostingClient
             throw new ThgHostingException("Env variable `X-Api-Token-Test` not found.", 404);
         }
 
-        $env = match($env) {
+        $envs = [
             self::PROD_ENV => [
-                "token" => $_ENV['X-Api-Token-Test-Prod'],
-                "url"   => 'https://api.thghosting.com/rest-api/'
-            ],
-            self::LOCAL_ENV => [
-                "token" => $_ENV['X-Api-Token-Test-Local'],
-                "url" => $_ENV['Local-Gateway-Url']
-            ],
-            self::DEV_ENV => [
-                "token" => $_ENV['X-Api-Token-Test'],
-                "url" => $_ENV['Dev-Gateway-Url']
-            ]
-        };
+               "token" => $_ENV['X-Api-Token-Test-Prod'],
+               "url"   => 'https://api.thghosting.com/rest-api/'
+           ],
+           self::LOCAL_ENV => [
+               "token" => $_ENV['X-Api-Token-Test-Local'],
+               "url" => $_ENV['Local-Gateway-Url']
+           ],
+           self::DEV_ENV => [
+               "token" => $_ENV['X-Api-Token-Test'],
+               "url" => $_ENV['Dev-Gateway-Url']
+           ],
+           'default' => [
+               "token" => $_ENV['X-Api-Token-Test'],
+               "url" => $_ENV['Dev-Gateway-Url']
+           ]
+        ];
+
+        $env = $envs[$env] ?? $envs['default'];
 
         parent::__construct($env["token"]);
         $this->host = $env["url"];
@@ -102,7 +108,7 @@ class ThgHostingTest extends ThgHostingClient
             }
             echo $resString;
             throw new \Exception(
-                $message ?? gettype($message),
+                (string) ($message ?? gettype($message)),
                 $statusCode
             );
         }
