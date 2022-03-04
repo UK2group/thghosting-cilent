@@ -18,9 +18,10 @@ class ThgHostingTest extends ThgHostingClient
 
     public function __construct(string $env = self::DEV_ENV)
     {
-        $path = '../test/keys/env.php';
+        $path = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR
+        . 'keys' . DIRECTORY_SEPARATOR . 'env.php';
         if (!\is_file($path)) {
-            throw new ThgHostingException('Env file ' . __DIR__ . $path . " not found.", 404);
+            throw new ThgHostingException('Env file ' . $path . " not found.", 404);
         }
         $_ENV = require $path;
 
