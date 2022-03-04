@@ -135,12 +135,13 @@ class ThgHostingClient
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
         curl_setopt($curl, CURLOPT_URL, $url);
-        $result = curl_exec($curl);
+        $result   = curl_exec($curl);
+        $curlInfo = curl_getinfo($curl);
         curl_close($curl);
 
         return [
             "data" => gettype($result) == 'string' ? (json_decode($result, true) ?? $result) : $result,
-            "info" => curl_getinfo($curl)
+            "info" => $curlInfo
         ];
     }
 
