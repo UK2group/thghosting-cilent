@@ -10,7 +10,7 @@
  */
 namespace ThgHosting;
 
-use ThgException;
+use ThgHosting\ThgHostingException as ThgHostingException;
 
 /**
  * THG Hosting API Client
@@ -67,7 +67,7 @@ class ThgHostingClient
         string $contentType = self::CONTENT_JSON
     ): array {
         if (!$this->validateMethod($method)) {
-            throw new ThgException("Not allowed method used. Allowed: " . implode(', ', array_keys($allowedMethods)), 405);
+            throw new ThgHostingException("Not allowed method used. Allowed: " . implode(', ', array_keys($this->allowedMethods)), 405);
         }
 
         $requestParams = $this->allowedMethods[$method];
