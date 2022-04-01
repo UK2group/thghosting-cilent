@@ -536,4 +536,19 @@ class ThgHostingClient
         return $this->request(self::POST, "orders", $body);
     }
 
+    public function getServerIPMIDetails(int $serverId): array
+    {
+        return $this->request(self::GET, "servers/$serverId/ipmi");
+    }
+
+    public function createServerIPMICredentials(int $serverId): array
+    {
+        return $this->request(self::POST, "servers/$serverId/ipmi");
+    }
+
+    public function deleteServerIPMICredentials(int $serverId): array
+    {
+        return $this->request(self::DELETE, "servers/$serverId/ipmi");
+    }
+
 }
