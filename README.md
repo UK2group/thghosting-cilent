@@ -335,6 +335,34 @@ composer require thg/thg-client
     );
 ```
 
+## Get IPMI details for server
+*Get IPMI details for server.*
+
+```php
+    $thgHostingClient-getServerIPMIDetails(
+        int $serverId // ID of the Server (see “Get Servers”)
+    );
+```
+
+
+## Create VPN user to access IPMI interface
+*Create VPN user to access IPMI interface.*
+
+```php
+    $thgHostingClient-createServerIPMICredentials(
+        int $serverId // ID of the Server (see “Get Servers”)
+    );
+```
+
+## Delete VPN access to IPMI interface
+*Delete VPN access to IPMI interface.*
+
+```php
+    $thgHostingClient-deleteServerIPMICredentials(
+        int $serverId // ID of the Server (see “Get Servers”)
+    );
+```
+
 ## Get Tickets
 *Get a list of active support tickets.*
 
