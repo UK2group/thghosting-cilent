@@ -419,7 +419,7 @@ class ThgHostingClient
         return $this->request(self::GET, "servers");
     }
 
-    public function getServerDetails(int $serverId): array
+    public function getServerDetails(string $serverId): array
     {
         return $this->request(self::GET, "servers/$serverId");
     }
@@ -536,19 +536,49 @@ class ThgHostingClient
         return $this->request(self::POST, "orders", $body);
     }
 
-    public function getServerIPMIDetails(int $serverId): array
+    public function getServerIPMIDetails(string $serverId): array
     {
         return $this->request(self::GET, "servers/$serverId/ipmi");
     }
 
-    public function createServerIPMICredentials(int $serverId): array
+    public function createServerIPMICredentials(string $serverId): array
     {
         return $this->request(self::POST, "servers/$serverId/ipmi");
     }
 
-    public function deleteServerIPMICredentials(int $serverId): array
+    public function deleteServerIPMICredentials(string $serverId): array
     {
         return $this->request(self::DELETE, "servers/$serverId/ipmi");
+    }
+
+    public function getServerPowerStatus(string $serverId): array
+    {
+        return $this->request(self::GET, "servers/$serverId/power/status");
+    }
+
+    public function powerOnServer(string $serverId): array
+    {
+        return $this->request(self::POST, "servers/$serverId/power/on");
+    }
+
+    public function powerOffServer(string $serverId): array
+    {
+        return $this->request(self::POST, "servers/$serverId/power/off");
+    }
+
+    public function rebootServer(string $serverId): array
+    {
+        return $this->request(self::POST, "servers/$serverId/power/reboot");
+    }
+
+    public function changeServerFriendlyName(string $serverId, array $body): array
+    {
+        return $this->request(self::PUT, "servers/$serverId/friendly-name", $body);
+    }
+
+    public function setRDNSentryForIpAddress(string $serverId, string $ipAddress, array $body): array
+    {
+        return $this->request(self::PUT, "servers/$serverId/ip-addresses/$ipAddress/rdns", $body);
     }
 
 }
