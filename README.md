@@ -320,7 +320,64 @@ composer require thg/thg-client
 
 ```php
     $thgHostingClient->getServerDetails(
-        int $serverId // ID of the Server (see “Get Servers”)
+        string $serverId // ID of the Server (see “Get Servers”)
+    );
+```
+
+## Get Server Power Status
+*Retrieve the current power state of the given dedicated server.*
+
+```php
+    $thgHostingClient->getServerPowerStatus(
+        string $serverId // ID of the Server (see “Get Servers”)
+    );
+```
+
+## Power On Server
+*Request the specified dedicated server to be turned on.*
+
+```php
+    $thgHostingClient->powerOnServer(
+        string $serverId // ID of the Server (see “Get Servers”)
+    );
+```
+
+## Power Off Server
+*Request the specified dedicated server to be turned off.*
+
+```php
+    $thgHostingClient->powerOffServer(
+        string $serverId // ID of the Server (see “Get Servers”)
+    );
+```
+
+## Reboot Server
+*Request the specified dedicated server to be rebooted.*
+
+```php
+    $thgHostingClient->rebootServer(
+        string $serverId // ID of the Server (see “Get Servers”)
+    );
+```
+
+## Change Server Friendly Name
+*Request friendly name change of specified dedicated server.*
+
+```php
+    $thgHostingClient->changeServerFriendlyName(
+        string $serverId, // ID of the Server (see “Get Servers”)
+        $body
+    );
+```
+
+## Set rDNS entry for IP address
+*Set rDNS entry for IP address of specified dedicated server.*
+
+```php
+    $thgHostingClient->changeServerFriendlyName(
+        string $serverId, // ID of the Server (see “Get Servers”)
+	string $ipAddress, //IP address the domain name should be associated with
+        $body
     );
 ```
 
