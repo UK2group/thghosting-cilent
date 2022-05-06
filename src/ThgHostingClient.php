@@ -582,4 +582,44 @@ class ThgHostingClient
         return $this->request(self::PUT, "servers/$serverId/ip-addresses/$ipAddress/rdns", $body);
     }
 
+    public function getBillingServices(?bool $showAddOns, ?string $sortBy, ?string $direction, ?int $offset, ?int $limit){
+        $params = [];
+
+        if(!is_null($showAddOns)){
+            $params['show_add_ons'] = (int) $showAddOns;
+        }
+
+        if(!is_null($sortBy)){
+            $params['sort_by'] = $sortBy;
+        }
+
+        if(!is_null($direction)){
+            $params['direction'] = $direction;
+        }
+
+        if(!is_null($offset)){
+            $params['offset'] = $offset;
+        }
+
+        if(!is_null($limit)){
+            $params['limit'] = $limit;
+        }
+
+        return $this->request(self::GET, "billing/services", $params);
+    }
+
+    public function getBillingInvoices(?int $offset, ?int $limit){
+        $params = [];
+
+        if(!is_null($offset)){
+            $params['offset'] = $offset;
+        }
+
+        if(!is_null($limit)){
+            $params['limit'] = $limit;
+        }
+
+        return $this->request(self::GET, "billing/invoices", $params);
+    }
+
 }

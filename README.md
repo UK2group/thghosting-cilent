@@ -552,6 +552,29 @@ composer require thg/thg-client
     $thgHostingClient->getPaymentMethods();
 ```
 
+## Get Billing Services
+*Returns customer services.*
+
+```php
+    $thgHostingClient->getBillingServices(
+        ?bool $showAddOns,  //Show the add-ons belonging to each service
+        ?string $sortBy,    //Sort by column (service_id/createdon)
+        ?string $direction, //Sort direction (default asc)
+        ?int $offset,       //If set, returns records starting from this offset
+        ?int $limit         //If set, limits the number of records
+    );
+```
+
+## Get Billing Invoices
+*Returns customer invoices.*
+
+```php
+    $thgHostingClient->getBillingInvoices(
+        ?int $offset,       //If set, returns records starting from this offset
+        ?int $limit         //If set, limits the number of records
+    );
+```
+
 ## Submit Order for Processing
 *Submit order for processing.*
 
