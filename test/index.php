@@ -63,7 +63,7 @@
     <body>
         <pre class="preview"><?php
             try {
-                $client = new ThgHostingTest(ThgHostingTest::DEV_ENV);
+                $client = new ThgHostingTest(ThgHostingTest::LOCAL_ENV);
                 /* Test Preview */
                 // echo $client->generatePreview([
                 //     "test1" => [
@@ -154,35 +154,85 @@
                 // $res = $client->testMethod('getServerDetails', [25]);
                 // $res = $client->testMethod('getServerBandwidthGraph', [13140, '2022-01-04', '2022-02-04']);
                 /* SSD VPS */
-                $res = $client->testMethod('getSsdVpsPlans');
-                // $res = $client->getSsdVpsLocations();
-                // $res = $client->getSsdVpsCustomTemplates(locationId);
-                // $res = $client->createSsdVpsServer(locationId, label, hostname, password, servicePlanId, osComponentCode, backups, billHourly, customTemplateId);
-                // $res = $client->getSsdVpsOses(locationId);
-                // $res = $client->getSsdVpsServers(locationId);
-                // $res = $client->getSsdVpsServerDetails(locationId, serverId);
-                // $res = $client->deleteSsdVpsServer(locationId, serverId);
-                // $res = $client->getSsdVpsServerStatus(locationId, serverId);
-                // $res = $client->powerOnSsdVpsServer(locationId, serverId);
-                // $res = $client->powerOffSsdVpsServer(locationId, serverId);
-                // $res = $client->rebootSsdVpsServer(locationId, serverId);
-                // $res = $client->rebootSsdVpsServerInRecoveryMode(locationId, serverId);
-                // $res = $client->resetSsdVpsServerPassword(locationId, serverId, newPassword);
-                // $res = $client->getSsdVpsServerBackups(locationId, serverId);
-                // $res = $client->addSsdVpsBackupNote(locationId, serverId, backupId, note);
-                // $res = $client->deleteSsdVpsBackup(locationId, serverId, backupId);
-                // $res = $client->restoreSsdVpsBackup(locationId, serverId, backupId);
+                // $res = $client->testMethod('getSsdVpsPlans');
+                // $res = $client->testMethod('getSsdVpsLocations');
+                // $res = $client->testMethod('getSsdVpsCustomTemplates', [21]);
+                // $res = $client->testMethod('createSsdVpsServer',
+                //     [
+                //         20,
+                //         'label',
+                //         'hostname.pl',
+                //         'password',
+                //         2698,
+                //         null,
+                //         true,
+                //         false,
+                //         211
+                //     ]
+                // );
+                // $res = $client->testMethod('getSsdVpsOses', [20]);
+                // $res = $client->testMethod('getSsdVpsServers', [20]);
+                // $res = $client->testMethod('getSsdVpsServerDetails', [20, 509]); // Test on staging
+                // $res = $client->testMethod('deleteSsdVpsServer', [20, 509]); // Staging
+                // $res = $client->testMethod('getSsdVpsServerStatus', [20, 509]); // Staging
+                // $res = $client->testMethod('powerOnSsdVpsServer', [20, 509]);
+                // $res = $client->testMethod('powerOffSsdVpsServer', [20, 509]);
+                // $res = $client->testMethod('rebootSsdVpsServer', [20, 509]);
+                // $res = $client->testMethod('rebootSsdVpsServerInRecoveryMode', [20, 509]);
+                // $res = $client->testMethod('resetSsdVpsServerPassword', [20, 509]);
+                // $res = $client->testMethod('getSsdVpsServerBackups', [20, 509]);
+                // $res = $client->testMethod('addSsdVpsBackupNote', [20, 509, 2329, 'Test note']);
+                // $res = $client->testMethod('deleteSsdVpsBackup', [20, 509, 2353]);
+                // $res = $client->testMethod('restoreSsdVpsBackup', [20, 509, 2544]);
                 /* STATUSES */
-                // $res = $client->getStatusUpdates();
+                // $res = $client->testMethod('getStatusUpdates');
                 /* TICKET */
-                // $res = $client->getTickets();
-                // $res = $client->createTicket(body, subject, department, priority, attachments);
-                // $res = $client->getTicketDepartments();
-                // $res = $client->getTicketDetails(ticketId);
-                // $res = $client->updateTicket(ticketId, priority, closeTicket);
-                // $res = $client->addReplyToTicket(ticketId, body, attachments);
+                // $res = $client->testMethod('getTickets');
+                // $res = $client->testMethod('getTicketDepartments');
+                // $file1 = '/home/michal/Desktop/current7.png';
+                // $file2 = '/home/michal/Desktop/current6.png';
+                // $res = $client->testMethod('createTicket', [
+                //     'Body Open API client test',
+                //     'Open API client test',
+                //     1,
+                //     3,
+                //     [
+                //         [
+                //             "mime" => mime_content_type($file1),
+                //             "file" => base64_encode(file_get_contents($file1)),
+                //             "name" => basename($file1)
+                //         ],
+                //         [
+                //             "mime" => mime_content_type($file2),
+                //             "file" => base64_encode(file_get_contents($file2)),
+                //             "name" => basename($file2)
+                //         ],
+                //
+                //     ]
+                // ]); // 3765
+                // $res = $client->testMethod('getTicketDetails', [3765]);
+                // $res = $client->testMethod('updateTicket', [3765, 2]);
+                // $res = $client->testMethod('addReplyToTicket', [
+                //     3765,
+                //     'Reply to Open API ticket',
+                //     ['/home/michal/Desktop/current7.png', '/home/michal/Desktop/current6.png']
+                // ]);
+                // $res = $client->testMethod('getServices');
+                $res = $client->testMethod('getServiceUpgrades', [
+                    7807,
+                    'M1-18'
+                ]);
+                $res = $client->testMethod('upgradesService', [
+                    7807,
+                    'BAND',
+                    'BAND-100TB',
+                    'Details',
+                    2
+                ]);
                 if (isset($res)) {
                     echo $res;
+                } else {
+                    echo "No method tested.";
                 }
             } catch (\Throwable $e) {
                 echo $e->getMessage() . " => " . $e->getFile() . " => " . $e->getLine() . PHP_EOL;
