@@ -224,6 +224,7 @@
                 ]);
                 $res = $client->testMethod('upgradesService', [
                     7807,
+                    'M1-18',
                     'BAND',
                     'BAND-100TB',
                     'Details',
