@@ -639,7 +639,7 @@ class ThgHostingClient
         string $addonCode,
         string $optionCode,
         string $details = '',
-        int    $quantity = 1
+        int    $quantity = 1,
         ?array $ipCount = null
     ): array {
         $params = [
@@ -654,7 +654,7 @@ class ThgHostingClient
             $params['ip_count'] = $ipCount;
         }
 
-        return $this->request(self::POST, "services/upgrades/$service_id/$service_code/list", $params);
+        return $this->request(self::POST, "services/upgrade", $params);
     }
 
 }
