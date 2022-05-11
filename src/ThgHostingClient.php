@@ -650,7 +650,7 @@ class ThgHostingClient
             "quantity"    => $quantity
         ];
 
-        if (\is_null($ipCount)) {
+        if (!\is_null($ipCount)) {
             $params['ip_count'] = $ipCount;
         }
 
