@@ -636,6 +636,7 @@ class ThgHostingClient
 
     public function upgradesService(
         int    $serviceId,
+        string $serviceCode,
         string $addonCode,
         string $optionCode,
         string $details = '',
@@ -643,11 +644,12 @@ class ThgHostingClient
         ?array $ipCount = null
     ): array {
         $params = [
-            "service"     => $serviceId,
-            "addon_code"  => $addonCode,
-            "option_code" => $optionCode,
-            "details"     => $details,
-            "quantity"    => $quantity
+            "service"      => $serviceId,
+            "service_code" => $serviceCode,
+            "addon_code"   => $addonCode,
+            "option_code"  => $optionCode,
+            "details"      => $details,
+            "quantity"     => $quantity
         ];
 
         if (!\is_null($ipCount)) {
