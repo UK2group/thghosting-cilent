@@ -610,3 +610,48 @@ composer require thg/thg-client
         array $body
     );
 ```
+
+## Get Services
+*Returns a list of active services.*
+
+```php
+    $thgHostingClient->getServices();
+```
+
+
+## Get Service Upgrades
+*Returns a list of available upgrades for chosen service.*
+
+```php
+    $thgHostingClient->getServiceUpgrades(
+        int    $service_id,  // ID of the Service (see “Get Services”)
+        string $service_code // Code of chosen Service (see “Get Services”)
+    );
+```
+
+## Get Service Upgrades
+*Returns a list of available upgrades for chosen service.*
+
+```php
+    // Example of IP Count with all possible options, you can send only those that have value over 0
+    $ipCount = [
+        "vpn"         => 0,
+		"sqldb"       => 0,
+		"ssl_cert"    => 0,
+		"terminal"    => 0,
+		"application" => 0,
+		"voice"       => 0,
+		"media"       => 0,
+		"mailing"     => 0,
+		"other"       => 0,
+    ];
+
+    $thgHostingClient->upgradesService(
+        int    $serviceId,      // To which server add chosen Upgrade (see “Get Services”)
+        string $addonCode,      // Upgrade category code (see “Get Upgrades”)
+        string $optionCode,     // Upgrade Code (see “Get Upgrades”)
+        string $details = '',   // Reason explaining the need for upgrade (Not required for Backup Protection)
+        int    $quantity = 1    // The amount of Upgrades
+        ?array $ipCount = null  // Required only when sending request for new IP. Describes the amount and type of needed IPs.
+    );
+```
