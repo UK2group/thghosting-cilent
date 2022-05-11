@@ -218,18 +218,29 @@
                 //     ['/home/michal/Desktop/current7.png', '/home/michal/Desktop/current6.png']
                 // ]);
                 // $res = $client->testMethod('getServices');
-                $res = $client->testMethod('getServiceUpgrades', [
-                    7807,
-                    'M1-18'
-                ]);
-                $res = $client->testMethod('upgradesService', [
-                    7807,
-                    'M1-18',
-                    'BAND',
-                    'BAND-100TB',
-                    'Details',
-                    2
-                ]);
+                // $res = $client->testMethod('getServiceUpgrades', [
+                //     7807,
+                //     'M1-18'
+                // ]);
+                // $res = $client->testMethod('upgradesService', [
+                //     7807,
+                //     'M1-18',
+                //     'BAND',
+                //     'BAND-100TB',
+                //     'Details',
+                //     2
+                // ]);
+                // $res = $client->testMethod('upgradesService', [
+                //     7807,
+                //     'M1-18',
+                //     'IP-REQ',
+                //     'IP-REQUEST',
+                //     'Details',
+                //     1,
+                //     [
+                //         "terminal" => 1
+                //     ]
+                // ]);
                 if (isset($res)) {
                     echo $res;
                 } else {

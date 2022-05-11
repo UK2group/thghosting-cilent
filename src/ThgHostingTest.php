@@ -107,7 +107,6 @@ class ThgHostingTest extends ThgHostingClient
                 $resString .= $this->generatePreview($res['info']);
             }
             echo $resString;
-            var_dump($message);
             throw new \Exception(
                 (string) ($message ?? gettype($message)),
                 $statusCode
