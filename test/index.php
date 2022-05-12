@@ -240,6 +240,7 @@
                 //         "terminal" => 1
                 //     ]
                 // ]);
+                $res = $client->testMethod('getUserList');
                 if (isset($res)) {
                     echo $res;
                 } else {
