@@ -622,4 +622,46 @@ class ThgHostingClient
         return $this->request(self::GET, "billing/invoices", $params);
     }
 
+    public function getSSLCertificates(?int $offset, ?int $limit, bool $collected = false)
+    {
+        $params = [];
+
+        if (!is_null($offset)) {
+            $params['offset'] = $offset;
+        }
+
+        if ($collected) {
+            $params['collected'] = "true";
+        }
+
+        return $this->request(self::GET, "ssl", $params);
+    }
+
+    public function createSSLCertificate(string $domain, string $csr)
+    {
+        $params = [];
+
+        $params['domain'] = $domain;
+        $params['csr']    = $csr;
+
+        return $this->request(self::POST, "ssl", $params);
+    }
+
+    public function applySSLCertificate(string $domain, string $csr, string $email, int $serverSoftware)
+    {
+        $params = [];
+
+        $params['domain']         = $domain;
+        $params['csr']            = $csr;
+        $params['email']          = $email;
+        $params['serverSoftware'] = $serverSoftware;
+
+        return $this->request(self::POST, "ssl/apply", $params);
+    }
+
+    public function downloadSSLCertificate(int $certificateId)
+    {
+        return $this->request(self::GET, "ssl/" . $certificateId . "/download");
+    }
+
 }

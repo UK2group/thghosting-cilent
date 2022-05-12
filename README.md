@@ -574,6 +574,56 @@ composer require thg/thg-client
         ?int $limit         //If set, limits the number of records
     );
 ```
+## Get SSL Certificates
+*Returns SSL Certificates*
+
+```php
+    $thgHostingClient->getSSLCertificates(
+        ?int $offset,                     //If set, returns records starting from this offset
+        ?int $limit                       //If set, limits the number of records
+        bool $collected = false           //If true, returns only collected certificates
+    );
+```
+
+## Create an SSL Certificate
+*This method serves two purposes; it validates the CSR and other needed fields, as well as returns possible domain control validation (DCV) email addresses, which are needed to validate domain ownership. These emails are returned in the 'text' array of successful calls*
+
+```php
+    $thgHostingClient->createSSLCertificate(
+        string $domain, //FQDN for which the SSL is being requested for
+        string $csr     //CSR generated for the request
+    );
+```
+
+## Apply an SSL Certificate
+*This method serves two purposes; it validates the CSR and other needed fields, as well as returns possible domain control validation (DCV) email addresses, which are needed to validate domain ownership. These emails are returned in the 'text' array of successful calls*
+
+```php
+    $thgHostingClient->applySSLCertificate(
+        string $domain,         //FQDN for which the SSL is being requested for
+        string $csr,            //CSR generated for the request
+        string $email,          //Verification email address provided by createSSLCertificate()
+        int $serverSoftware     //Type of server
+                                //2 - Apache
+                                //10 - Java-based servers
+                                //14 - Microsoft IIS 5.x to 6.x
+                                //35 - Microsoft IIS 7.x and later
+                                //36 - nginx
+                                //18 - Oracle
+                                //30 - Plesk
+                                //31 - WHM/cPanel
+                                //-1 - OTHER
+    );
+```
+
+## Download an SSL Certificate
+*Downloads an SSL Certificate*
+
+```php
+    $thgHostingClient->downloadSSLCertificate(
+        int $certificateId  //ID of the SSL certificate
+    );
+```
 
 ## Submit Order for Processing
 *Submit order for processing.*
