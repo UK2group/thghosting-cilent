@@ -654,12 +654,16 @@ class ThgHostingClient
         return $this->request(self::POST, "billing/services/upgrade/", $params);
     }
 
-    public function getUserList() {
-        return $this->request(self::GET, "user/list");
+    public function getUserList(){
+        return $this->request(self::GET, "user");
     }
 
-    public function getUserPermissions(string $email){
-        return $this->request(self::GET, "user/permissions", ["email" => $email]);
+    public function getUserPermissions(){
+        return $this->request(self::GET, "user/permissions");
+    }
+
+    public function getUser(string $email){
+        return $this->request(self::GET, "user/details", ["email" => $email]);
     }
 
 }
