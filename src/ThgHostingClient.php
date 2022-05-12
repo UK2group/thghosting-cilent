@@ -624,14 +624,9 @@ class ThgHostingClient
         return $this->request(self::GET, "billing/invoices", $params);
     }
 
-    public function getServices(): array
+    public function getBillingServiceUpgrades(int $serviceId, string $serviceCode): array
     {
-        return $this->request(self::GET, "services/list");
-    }
-
-    public function getServiceUpgrades(int $serviceId, string $serviceCode): array
-    {
-        return $this->request(self::GET, "services/upgrades/$serviceId/$serviceCode/list");
+        return $this->request(self::GET, "billing/upgrades/$serviceId/$serviceCode/list");
     }
 
     public function upgradesService(
@@ -656,7 +651,7 @@ class ThgHostingClient
             $params['ip_count'] = $ipCount;
         }
 
-        return $this->request(self::POST, "services/upgrade", $params);
+        return $this->request(self::POST, "billing/upgrade", $params);
     }
 
 }
