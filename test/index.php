@@ -217,8 +217,7 @@
                 //     'Reply to Open API ticket',
                 //     ['/home/michal/Desktop/current7.png', '/home/michal/Desktop/current6.png']
                 // ]);
-                // $res = $client->testMethod('getServices');
-                // $res = $client->testMethod('getServiceUpgrades', [
+                // $res = $client->testMethod('getBillingServiceUpgrades', [
                 //     7807,
                 //     'M1-18'
                 // ]);
