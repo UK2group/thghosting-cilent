@@ -611,19 +611,11 @@ composer require thg/thg-client
     );
 ```
 
-## Get Services
-*Returns a list of active services.*
-
-```php
-    $thgHostingClient->getServices();
-```
-
-
 ## Get Service Upgrades
 *Returns a list of available upgrades for chosen service.*
 
 ```php
-    $thgHostingClient->getServiceUpgrades(
+    $thgHostingClient->getBillingServiceUpgrades(
         int    $service_id,  // ID of the Service (see “Get Services”)
         string $service_code // Code of chosen Service (see “Get Services”)
     );
