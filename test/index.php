@@ -240,7 +240,8 @@
                 //         "terminal" => 1
                 //     ]
                 // ]);
-                $res = $client->testMethod('getUserList');
+                // $res = $client->testMethod('getUserList');
+                // $res = $client->testMethod('getUserPermissions', ['1170@example.com']);
                 if (isset($res)) {
                     echo $res;
                 } else {
