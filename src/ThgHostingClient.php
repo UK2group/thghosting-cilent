@@ -622,4 +622,8 @@ class ThgHostingClient
         return $this->request(self::GET, "billing/invoices", $params);
     }
 
+    public function getUserList(){
+        return $this->request(self::GET, "user/list");
+    }
+
 }
