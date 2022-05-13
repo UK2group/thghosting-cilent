@@ -102,7 +102,7 @@ class ThgHostingTest extends ThgHostingClient
         $statusCode = $res['data']['status_code'] ?? 500;
         if (!in_array(($res['data']['status_code'] ?? 500), $successStatuses)) {
 
-            if (isset($res['info']['http_code']) && $res['info']['http_code'] == 0) {
+            if (isset($res['info']['total_time']) && $res['info']['total_time'] >= $this->getTimeout()) {
                 $message = 'Timeout';
             }
 
