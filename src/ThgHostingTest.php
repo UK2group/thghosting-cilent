@@ -101,6 +101,11 @@ class ThgHostingTest extends ThgHostingClient
         $message = ($res['data']['message'] ?? null) ?? ($res['data']['error']['description'] ?? $res['data']);
         $statusCode = $res['data']['status_code'] ?? 500;
         if (!in_array(($res['data']['status_code'] ?? 500), $successStatuses)) {
+
+            if (isset($res['info']['http_code']) && $res['info']['http_code'] == 0) {
+                $message = 'Timeout';
+            }
+
             $resString .= ' returned an error - ' . $message . PHP_EOL;
             if (isset($res['info'])) {
                 $resString .= "Info:" . PHP_EOL;

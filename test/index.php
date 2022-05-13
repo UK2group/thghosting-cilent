@@ -241,7 +241,8 @@
                 //     ]
                 // ]);
                 // $res = $client->testMethod('getUserList');
-                // $res = $client->testMethod('getUserPermissions', ['1170@example.com']);
+                // $res = $client->testMethod('getUserPermissions');
+                $res = $client->testMethod('getUser', ['asd@asd.pl']);
                 if (isset($res)) {
                     echo $res;
                 } else {
