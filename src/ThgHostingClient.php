@@ -665,18 +665,15 @@ class ThgHostingClient
         string $firstName,
         string $lastName,
         bool $twoFaRequired,
-        ?array $permissions = null
+        array $permissions
     ): array {
         $body = [
             "email" => $email,
             "firstName" => $firstName,
             "lastName" => $lastName,
             "two_fa_required" => $twoFaRequired,
+            "permissions" = $permissions,
         ];
-
-        if (!is_null($permissions)) {
-            $body['permissions'] = $permissions;
-        }
 
         return $this->request(self::POST, "user/details", $body);
     }
