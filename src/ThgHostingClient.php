@@ -671,7 +671,7 @@ class ThgHostingClient
             "email" => $email,
             "firstName" => $firstName,
             "lastName" => $lastName,
-            "two_fa_required" => $twoFaRequired,
+            "two_fa_required" => $twoFaRequired ? '1' : '0',
             "permissions" => $permissions,
         ];
 
