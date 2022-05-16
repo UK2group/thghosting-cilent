@@ -672,7 +672,7 @@ class ThgHostingClient
             "firstName" => $firstName,
             "lastName" => $lastName,
             "two_fa_required" => $twoFaRequired,
-            "permissions" = $permissions,
+            "permissions" => $permissions,
         ];
 
         return $this->request(self::POST, "user/details", $body);
