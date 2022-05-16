@@ -707,7 +707,7 @@ class ThgHostingClient
             "permissions" => $permissions,
         ];
 
-        return $this->request(self::POST, "user/details", $body);
+        return $this->request(self::POST, "user", $body);
     }
 
 }
