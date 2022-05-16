@@ -88,7 +88,7 @@ class ThgHostingClient
         if (is_null($timeout)) {
             $timeout = $this->getTimeout();
         }
-        
+
         if (!$this->validateMethod($method)) {
             throw new ThgHostingException("Not allowed method used. Allowed: " . implode(', ', array_keys($this->allowedMethods)), 405);
         }
@@ -645,16 +645,40 @@ class ThgHostingClient
         return $this->request(self::GET, "billing/invoices", $params);
     }
 
-    public function getUserList(){
+    public function getUserList(): array
+    {
         return $this->request(self::GET, "user");
     }
 
-    public function getUserPermissions(){
+    public function getUserPermissions(): array
+    {
         return $this->request(self::GET, "user/permissions");
     }
 
-    public function getUser(string $email){
+    public function getUser(string $email): array
+    {
         return $this->request(self::GET, "user/details", ["email" => $email]);
+    }
+
+    public function addUser(
+        string $email,
+        string $firstName,
+        string $lastName,
+        bool $twoFaRequired,
+        ?array $permissions = null
+    ): array {
+        $body = [
+            "email" => $email,
+            "firstName" => $firstName,
+            "lastName" => $lastName,
+            "two_fa_required" => $twoFaRequired,
+        ];
+
+        if (!is_null($permissions)) {
+            $body['permissions'] = $permissions;
+        }
+
+        return $this->request(self::POST, "user/details", $body);
     }
 
 }
