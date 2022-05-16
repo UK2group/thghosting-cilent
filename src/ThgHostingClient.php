@@ -682,9 +682,9 @@ class ThgHostingClient
         return $this->request(self::GET, "user");
     }
 
-    public function getUserPermissions(): array
+    public function getUserRoles(): array
     {
-        return $this->request(self::GET, "user/permissions");
+        return $this->request(self::GET, "user/roles");
     }
 
     public function getUser(string $email): array
