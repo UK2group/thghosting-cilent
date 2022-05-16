@@ -242,7 +242,8 @@
                 // ]);
                 // $res = $client->testMethod('getUserList');
                 // $res = $client->testMethod('getUserPermissions');
-                $res = $client->testMethod('getUser', ['asd@asd.pl']);
+                // $res = $client->testMethod('getUser', ['asd@asd.pl']);
+                $res = $client->testMethod('addUser', ['asd23@asd.pl', 'name', 'last', true, []]);
                 if (isset($res)) {
                     echo $res;
                 } else {
