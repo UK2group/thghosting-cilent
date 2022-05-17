@@ -700,10 +700,10 @@ class ThgHostingClient
         array $roles
     ): array {
         $body = [
-            "email"     => $email,
-            "firstName" => $firstName,
-            "lastName"  => $lastName,
-            "roles"     => $roles,
+            "email"      => $email,
+            "first_name" => $firstName,
+            "last_name"  => $lastName,
+            "roles"      => $roles,
             "two_fa_required" => $twoFaRequired ? '1' : '0',
         ];
 
