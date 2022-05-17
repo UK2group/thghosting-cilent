@@ -238,7 +238,7 @@
                 // $res = $client->testMethod('getUserList');
                 // $res = $client->testMethod('getUserRoles');
                 // $res = $client->testMethod('getUser', ['asd@asd.pl']);
-                // $res = $client->testMethod('addUser', ['asd23@asd.pl', 'name', 'last', true, ['Support']]);
+                // $res = $client->testMethod('addUser', ['test23@example.com', 'name', 'last', true, ['Support']]);
                 if (isset($res)) {
                     echo $res;
                 } else {
