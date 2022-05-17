@@ -627,14 +627,14 @@ composer require thg/thg-client
     // Example of IP Count with all possible options, you can send only those that have value over 0
     $ipCount = [
         "vpn"         => 0,
-		"sqldb"       => 0,
-		"ssl_cert"    => 0,
-		"terminal"    => 0,
-		"application" => 0,
-		"voice"       => 0,
-		"media"       => 0,
-		"mailing"     => 0,
-		"other"       => 0,
+        "sqldb"       => 0,
+        "ssl_cert"    => 0,
+        "terminal"    => 0,
+        "application" => 0,
+        "voice"       => 0,
+        "media"       => 0,
+        "mailing"     => 0,
+        "other"       => 0,
     ];
 
     $thgHostingClient->upgradesService(
