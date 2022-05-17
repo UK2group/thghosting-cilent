@@ -217,13 +217,9 @@
                 //     'Reply to Open API ticket',
                 //     ['/home/michal/Desktop/current7.png', '/home/michal/Desktop/current6.png']
                 // ]);
-                // $res = $client->testMethod('getBillingServiceUpgrades', [
-                //     7807,
-                //     'M1-18'
-                // ]);
+                // $res = $client->testMethod('getBillingServiceUpgrades', [7807]);
                 // $res = $client->testMethod('upgradesService', [
                 //     7807,
-                //     'M1-18',
                 //     'BAND',
                 //     'BAND-100TB',
                 //     'Details',
@@ -231,7 +227,6 @@
                 // ]);
                 // $res = $client->testMethod('upgradesService', [
                 //     7807,
-                //     'M1-18',
                 //     'IP-REQ',
                 //     'IP-REQUEST',
                 //     'Details',
@@ -243,7 +238,7 @@
                 // $res = $client->testMethod('getUserList');
                 // $res = $client->testMethod('getUserRoles');
                 // $res = $client->testMethod('getUser', ['asd@asd.pl']);
-                $res = $client->testMethod('addUser', ['asd23@asd.pl', 'name', 'last', true, ['Support']]);
+                // $res = $client->testMethod('addUser', ['asd23@asd.pl', 'name', 'last', true, ['Support']]);
                 if (isset($res)) {
                     echo $res;
                 } else {
