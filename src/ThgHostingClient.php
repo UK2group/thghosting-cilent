@@ -697,14 +697,14 @@ class ThgHostingClient
         string $firstName,
         string $lastName,
         bool $twoFaRequired,
-        array $permissions
+        array $roles
     ): array {
         $body = [
-            "email" => $email,
+            "email"     => $email,
             "firstName" => $firstName,
-            "lastName" => $lastName,
+            "lastName"  => $lastName,
+            "roles"     => $roles,
             "two_fa_required" => $twoFaRequired ? '1' : '0',
-            "permissions" => $permissions,
         ];
 
         return $this->request(self::POST, "user", $body);
