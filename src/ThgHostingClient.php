@@ -88,7 +88,7 @@ class ThgHostingClient
         if (is_null($timeout)) {
             $timeout = $this->getTimeout();
         }
-        
+
         if (!$this->validateMethod($method)) {
             throw new ThgHostingException("Not allowed method used. Allowed: " . implode(', ', array_keys($this->allowedMethods)), 405);
         }
@@ -675,16 +675,36 @@ class ThgHostingClient
         return $this->request(self::POST, "billing/services/upgrade/", $params);
     }
 
-    public function getUserList(){
+    public function getUserList(): array
+    {
         return $this->request(self::GET, "user");
     }
 
-    public function getUserPermissions(){
-        return $this->request(self::GET, "user/permissions");
+    public function getUserRoles(): array
+    {
+        return $this->request(self::GET, "user/roles");
     }
 
-    public function getUser(string $email){
-        return $this->request(self::GET, "user/details", ["email" => $email]);
+    public function getUser(): array
+    {
+        return $this->request(self::GET, "user/details");
     }
 
+    public function addUser(
+        string $email,
+        string $firstName,
+        string $lastName,
+        bool $twoFaRequired,
+        array $roles
+    ): array {
+        $body = [
+            "email"      => $email,
+            "first_name" => $firstName,
+            "last_name"  => $lastName,
+            "roles"      => $roles,
+            "two_fa_required" => $twoFaRequired ? '1' : '0',
+        ];
+
+        return $this->request(self::POST, "user", $body);
+    }
 }

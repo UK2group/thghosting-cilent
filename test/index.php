@@ -105,16 +105,14 @@
                 // $res = $client->testMethod('getProductDetails', [8, 2, 40]);
                 // $body = [
                 //     [
-                //         "product_id" => 34,
+                //         "product_id" => 227,
                 //         "quantity" => 1,
-                //         "price" => 354.9,
-                //         "datacenter_id" => 6,
+                //         "location_id" => 45,
                 //         "duration_id" => 2,
                 //         "addons" => [
                 //             [
-                //                 "addon_id"=> 4,
-                //                 "selected_option"=> 2,
-                //                 "price"=> 10
+                //                 "addon_id"=> 47,
+                //                 "selected_option"=> 282,
                 //             ]
                 //         ]
                 //     ]
@@ -124,13 +122,17 @@
                 // $body = [
                 //     "order"=> [
                 //         [
-                //           "category_id"=> 2,
-                //           "product_id" => 34,
+                //           "product_id" => 227,
                 //           "quantity" => 1,
-                //           "price" => 354.9,
-                //           "datacenter_id" => 6,
+                //           "location_id" => 45,
                 //           "duration_id" => 2,
-                //           "addons" => [],
+                //           "addons" => [
+                //             [
+                //               "addon_id"=> 47,
+                //               "selected_option"=> 282,
+                //               "price"=> 1
+                //             ]
+                //           ],
                 //           "sales_tax"=> 0
                 //         ]
                 //     ],
@@ -237,7 +239,7 @@
                 // ]);
                 // $res = $client->testMethod('getUserList');
                 // $res = $client->testMethod('getUserRoles');
-                // $res = $client->testMethod('getUser', ['asd@asd.pl']);
+                // $res = $client->testMethod('getUser');
                 // $res = $client->testMethod('addUser', ['asd23@asd.pl', 'name', 'last', true, ['Support']]);
                 if (isset($res)) {
                     echo $res;
