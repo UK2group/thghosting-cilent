@@ -605,44 +605,74 @@ class ThgHostingClient
         return $this->request(self::PUT, "servers/$serverId/ip-addresses/$ipAddress/rdns", $body);
     }
 
-    public function getBillingServices(?bool $showAddOns, ?string $sortBy, ?string $direction, ?int $offset, ?int $limit){
+    public function getBillingServices(?bool $showAddOns, ?string $sortBy, ?string $direction, ?int $offset, ?int $limit): array
+    {
         $params = [];
 
-        if(!is_null($showAddOns)){
+        if (!is_null($showAddOns)) {
             $params['show_add_ons'] = (int) $showAddOns;
         }
 
-        if(!is_null($sortBy)){
+        if (!is_null($sortBy)) {
             $params['sort_by'] = $sortBy;
         }
 
-        if(!is_null($direction)){
+        if (!is_null($direction)) {
             $params['direction'] = $direction;
         }
 
-        if(!is_null($offset)){
+        if (!is_null($offset)) {
             $params['offset'] = $offset;
         }
 
-        if(!is_null($limit)){
+        if (!is_null($limit)) {
             $params['limit'] = $limit;
         }
 
         return $this->request(self::GET, "billing/services", $params);
     }
 
-    public function getBillingInvoices(?int $offset, ?int $limit){
+    public function getBillingInvoices(?int $offset, ?int $limit): array
+    {
         $params = [];
 
-        if(!is_null($offset)){
+        if (!is_null($offset)) {
             $params['offset'] = $offset;
         }
 
-        if(!is_null($limit)){
+        if (!is_null($limit)) {
             $params['limit'] = $limit;
         }
 
         return $this->request(self::GET, "billing/invoices", $params);
+    }
+
+    public function getBillingServiceUpgrades(int $serviceId): array
+    {
+        return $this->request(self::GET, "billing/services/$serviceId/upgrades");
+    }
+
+    public function upgradesService(
+        int    $serviceId,
+        string $addonCode,
+        string $optionCode,
+        string $details = '',
+        int    $quantity = 1,
+        ?array $ipCount = null
+    ): array {
+        $params = [
+            "service"      => $serviceId,
+            "addon_code"   => $addonCode,
+            "option_code"  => $optionCode,
+            "details"      => $details,
+            "quantity"     => $quantity
+        ];
+
+        if (!\is_null($ipCount)) {
+            $params['ip_count'] = $ipCount;
+        }
+
+        return $this->request(self::POST, "billing/services/upgrade/", $params);
     }
 
     public function getUserList(): array
@@ -677,5 +707,4 @@ class ThgHostingClient
 
         return $this->request(self::POST, "user", $body);
     }
-
 }
