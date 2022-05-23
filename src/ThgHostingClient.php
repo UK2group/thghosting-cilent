@@ -707,5 +707,4 @@ class ThgHostingClient
 
         return $this->request(self::POST, "user", $body);
     }
-
 }
