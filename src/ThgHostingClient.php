@@ -25,7 +25,7 @@ class ThgHostingClient
     public const PATCH  = "PATCH";
     PUBLIC CONST CONTENT_JSON = 'application/json';
     PUBLIC CONST CONTENT_MULTIPART = 'multipart/form-data';
-    private $timeout = 10;
+    private $timeout = 60;
     private $allowedMethods = [
         self::GET    => [CURLOPT_CUSTOMREQUEST, self::GET   ],
         self::POST   => [CURLOPT_CUSTOMREQUEST, self::POST  ],
@@ -41,14 +41,32 @@ class ThgHostingClient
      * @param private $xApiToken  X-Api-Token required for any requests to
      *                            THG Hosting Open API
      */
-    function __construct(string $xApiToken)
+    function __construct(string $xApiToken, ?int $timeout = null)
     {
         $this->xApiToken = $xApiToken;
+
+        if (!is_null($timeout)) {
+            $this->setTimeout($timeout);
+        }
     }
 
     private function validateMethod(string $method): bool
     {
         return !!($this->allowedMethods[$method] ?? false);
+    }
+
+    public function getTimeout(): int
+    {
+        return $this->timeout;
+    }
+
+    public function setTimeout(int $timeout): int
+    {
+        if ($timeout < 0) {
+            throw new Exception("Timeout can't be lower then zero", 400);
+        }
+        $this->timeout = $timeout;
+        return $this;
     }
 
     /**
@@ -64,8 +82,13 @@ class ThgHostingClient
         string $endpoint,
         array $arguments = [],
         array $files = [],
-        string $contentType = self::CONTENT_JSON
+        string $contentType = self::CONTENT_JSON,
+        ?int $timeout = null
     ): array {
+        if (is_null($timeout)) {
+            $timeout = $this->getTimeout();
+        }
+
         if (!$this->validateMethod($method)) {
             throw new ThgHostingException("Not allowed method used. Allowed: " . implode(', ', array_keys($this->allowedMethods)), 405);
         }
@@ -652,4 +675,36 @@ class ThgHostingClient
         return $this->request(self::POST, "billing/services/upgrade/", $params);
     }
 
+    public function getUserList(): array
+    {
+        return $this->request(self::GET, "user");
+    }
+
+    public function getUserRoles(): array
+    {
+        return $this->request(self::GET, "user/roles");
+    }
+
+    public function getUser(): array
+    {
+        return $this->request(self::GET, "user/details");
+    }
+
+    public function addUser(
+        string $email,
+        string $firstName,
+        string $lastName,
+        bool $twoFaRequired,
+        array $roles
+    ): array {
+        $body = [
+            "email"      => $email,
+            "first_name" => $firstName,
+            "last_name"  => $lastName,
+            "roles"      => $roles,
+            "two_fa_required" => $twoFaRequired ? '1' : '0',
+        ];
+
+        return $this->request(self::POST, "user", $body);
+    }
 }
