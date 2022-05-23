@@ -647,14 +647,13 @@ class ThgHostingClient
         return $this->request(self::GET, "billing/invoices", $params);
     }
 
-    public function getBillingServiceUpgrades(int $serviceId, string $serviceCode): array
+    public function getBillingServiceUpgrades(int $serviceId): array
     {
-        return $this->request(self::GET, "billing/services/$serviceId/$serviceCode/upgrades");
+        return $this->request(self::GET, "billing/services/$serviceId/upgrades");
     }
 
     public function upgradesService(
         int    $serviceId,
-        string $serviceCode,
         string $addonCode,
         string $optionCode,
         string $details = '',
@@ -663,7 +662,6 @@ class ThgHostingClient
     ): array {
         $params = [
             "service"      => $serviceId,
-            "service_code" => $serviceCode,
             "addon_code"   => $addonCode,
             "option_code"  => $optionCode,
             "details"      => $details,
