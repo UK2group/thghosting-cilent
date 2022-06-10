@@ -17,7 +17,7 @@ use ThgHosting\ThgHostingException as ThgHostingException;
  */
 class ThgHostingClient
 {
-    protected $host = 'https://api.thghosting.com/rest-api/';
+    protected $host = 'https://api.ingenuitycloudservices.com/rest-api/';
     public const GET    = "GET";
     public const POST   = "POST";
     public const DELETE = "DELETE";
