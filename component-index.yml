@@ -1,0 +1,14 @@
+classification:
+  env: production
+  data: public
+  type: service
+ownership:
+  team: THG Control Panel
+staticanalysis:
+  instance: sonarqube.delta.io.thehut.local
+  key: thghosting-cilent
+dependencyanalysis:
+  type: snyk
+  snykprojectids:
+    - b50f4fc5-b66c-40d6-85c1-7c778ff5c884
+
