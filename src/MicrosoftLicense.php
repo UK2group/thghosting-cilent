@@ -70,4 +70,16 @@ trait MicrosoftLicense
     {
         return $this->request(ThgHostingClient::DELETE, "/services/$serviceId/licenses/$licenseId");
     }
+
+    /**
+     * Retrieves a list of available microsoft license products
+     *
+     * @param int $serviceId
+     * @return array|string
+     * @throws ThgHostingException
+     */
+    public function getMicrosoftLicenseProducts(int $serviceId)
+    {
+        return $this->request(ThgHostingClient::GET, "/services/$serviceId/ms-license-products");
+    }
 }

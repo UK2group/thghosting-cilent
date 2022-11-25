@@ -704,7 +704,6 @@ composer require thg/thg-client
         int $serviceId,      // Server service ID to get a list of licenses
     );
 ```
-
 ## Get Microsoft License Details
 *Returns Microsoft License Details*
 ```php
@@ -719,5 +718,12 @@ composer require thg/thg-client
     $thgHostingClient->deleteMicrosoftLicense(
         int $serviceId,      // Server service ID for deleting of an MS license which belongs to
         int $licenseId,      // License ID to delete
+    );
+```
+## Get Available Microsoft License Products
+*Returns A List Of Microsoft License Products*
+```php
+    $thgHostingClient->getMicrosoftLicenseProducts(
+        int $serviceId,      // Server service ID to get a list of license products
     );
 ```
