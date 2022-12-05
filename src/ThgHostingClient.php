@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /**
- * (c) The Hut Group 2001-2019, All Rights Reserved.
+ * (c) The Hut Group 2001-2022, All Rights Reserved.
  *
  * This source code is the property of The Hut Group, registered address:
  *
@@ -17,14 +17,16 @@ use ThgHosting\ThgHostingException as ThgHostingException;
  */
 class ThgHostingClient
 {
+    use MicrosoftLicense;
+
     protected $host = 'https://api.ingenuitycloudservices.com/rest-api/';
     public const GET    = "GET";
     public const POST   = "POST";
     public const DELETE = "DELETE";
     public const PUT    = "PUT";
     public const PATCH  = "PATCH";
-    PUBLIC CONST CONTENT_JSON = 'application/json';
-    PUBLIC CONST CONTENT_MULTIPART = 'multipart/form-data';
+    public const CONTENT_JSON = 'application/json';
+    public const CONTENT_MULTIPART = 'multipart/form-data';
     private $timeout = 60;
     private $allowedMethods = [
         self::GET    => [CURLOPT_CUSTOMREQUEST, self::GET   ],
@@ -38,21 +40,26 @@ class ThgHostingClient
     private $xApiToken;
 
     /**
-     * @param private $xApiToken  X-Api-Token required for any requests to
-     *                            THG Hosting Open API
+     * @param string $xApiToken X-Api-Token required for any requests to THG Hosting Open API
+     * @param int|null $timeout
+     * @param string|null $apiUrl
+     * @throws ThgHostingException
      */
-    function __construct(string $xApiToken, ?int $timeout = null)
+    public function __construct(string $xApiToken, ?int $timeout = null, ?string $apiUrl = null)
     {
         $this->xApiToken = $xApiToken;
 
         if (!is_null($timeout)) {
             $this->setTimeout($timeout);
         }
+        if (!empty($apiUrl)) {
+            $this->host = $apiUrl;
+        }
     }
 
     private function validateMethod(string $method): bool
     {
-        return !!($this->allowedMethods[$method] ?? false);
+        return (bool) ($this->allowedMethods[$method] ?? false);
     }
 
     public function getTimeout(): int
@@ -60,10 +67,13 @@ class ThgHostingClient
         return $this->timeout;
     }
 
-    public function setTimeout(int $timeout): int
+    /**
+     * @throws ThgHostingException
+     */
+    public function setTimeout(int $timeout): self
     {
         if ($timeout < 0) {
-            throw new Exception("Timeout can't be lower then zero", 400);
+            throw new ThgHostingException("Timeout can't be lower then zero", 400);
         }
         $this->timeout = $timeout;
         return $this;

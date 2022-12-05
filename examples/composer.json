@@ -1,0 +1,14 @@
+{
+    "name": "thg/thg-client-examples",
+    "description": "THG Open API client examples",
+    "license": "GPL-2.0-only",
+    "prefer-stable": true,
+    "require": {
+        "php": "^7.2 || ^8.0",
+        "thg/thg-client": "*",
+        "vlucas/phpdotenv": "*"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

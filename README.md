@@ -696,3 +696,34 @@ composer require thg/thg-client
         ?array $ipCount = null  // Required only when sending request for new IP. Describes the amount and type of needed IPs.
     );
 ```
+
+## Get Microsoft Licenses
+*Returns Microsoft Licenses*
+```php
+    $thgHostingClient->getMicrosoftLicenses(
+        int $serviceId,      // Server service ID to get a list of licenses
+    );
+```
+## Get Microsoft License Details
+*Returns Microsoft License Details*
+```php
+    $thgHostingClient->getMicrosoftLicenseDetails(
+        int $serviceId,      // Server service ID for retrieving of an MS license details which belongs to
+        int $licenseId,      // License ID to get an MS license details
+    );
+```
+## Delete Microsoft License
+*Deletes a Microsoft License*
+```php
+    $thgHostingClient->deleteMicrosoftLicense(
+        int $serviceId,      // Server service ID for deleting of an MS license which belongs to
+        int $licenseId,      // License ID to delete
+    );
+```
+## Get Available Microsoft License Products
+*Returns A List Of Microsoft License Products*
+```php
+    $thgHostingClient->getMicrosoftLicenseProducts(
+        int $serviceId,      // Server service ID to get a list of license products
+    );
+```
