@@ -1,6 +1,6 @@
 <?php
 /**
- * (c) The Hut Group 2001-2022, All Rights Reserved.
+ * (c) The Hut Group 2001-2023, All Rights Reserved.
  *
  * This source code is the property of The Hut Group, registered address:
  *
@@ -59,7 +59,7 @@ trait MicrosoftLicense
     }
 
     /**
-     * Deletes an MS license
+     * Deletes a MS license
      *
      * @param int $serviceId
      * @param int $licenseId

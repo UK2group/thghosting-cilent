@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /**
- * (c) The Hut Group 2001-2022, All Rights Reserved.
+ * (c) The Hut Group 2001-2023, All Rights Reserved.
  *
  * This source code is the property of The Hut Group, registered address:
  *

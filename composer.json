@@ -10,6 +10,8 @@
     },
     "require": {
         "php": ">=7.2.34",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "ext-fileinfo": "*",
+        "ext-json": "*"
     }
 }
