@@ -6,3 +6,7 @@
 /examples/composer.lock
 /examples/vendor/
 /examples/.env
+
+# Tests
+/reports
+.phpunit.result.cache
