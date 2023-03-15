@@ -9,7 +9,7 @@
  * @author Nha Nguyen <Nguyen-XuanN@thg.com>
  */
 
-use ThgHosting\ThgHostingException;
+use ThgHosting\Exceptions\ClientException;
 
 require_once __DIR__.'/vendor/autoload.php';
 
@@ -24,6 +24,6 @@ try {
     $thgHostingClient = new ThgHosting\ThgHostingClient($thgHostingXApiToken, $timeout, $apiUrl);
     $result = $thgHostingClient->getServers();
     print_r($result);
-} catch (ThgHostingException $e) {
+} catch (ClientException $e) {
     print_r($e);
 }

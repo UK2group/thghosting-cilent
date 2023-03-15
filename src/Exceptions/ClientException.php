@@ -8,7 +8,7 @@
  * Manchester, England, M90 3DQ
  * @author Michal Dzierzbicki <michal.dzierzbicki@thg.com>
  */
-namespace ThgHosting;
+namespace ThgHosting\Exceptions;
 
-final class ThgHostingException extends \Exception
+final class ClientException extends \Exception
 {}

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php /** @noinspection PhpUnused */
+/** @noinspection PhpFullyQualifiedNameUsageInspection */
+declare(strict_types=1);
 /**
  * (c) The Hut Group 2001-2023, All Rights Reserved.
  *
@@ -6,20 +8,16 @@
  *
  * 5th Floor, Voyager House, Chicago Avenue, Manchester Airport,
  * Manchester, England, M90 3DQ
- *
- * @author Michal Dzierzbicki <michal.dzierzbicki@thg.com>
  */
 namespace ThgHosting;
 
-use ThgHosting\ThgHostingException as ThgHostingException;
+use ThgHosting\Exceptions\ClientException;
 
 /**
  * THG Hosting API Client
  */
 class ThgHostingClient
 {
-    use MicrosoftLicense;
-
     const GET              = 'GET';
     const POST             = 'POST';
     const DELETE           = 'DELETE';
@@ -28,8 +26,8 @@ class ThgHostingClient
     const CONTENT_JSON     = 'application/json';
     const TICKETS_ENDPOINT = 'tickets/';
 
-    private $timeout        = 60;
-    private $allowedMethods = [
+    private int   $timeout        = 60;
+    private array $allowedMethods = [
         self::GET    => [CURLOPT_CUSTOMREQUEST, self::GET],
         self::POST   => [CURLOPT_CUSTOMREQUEST, self::POST],
         self::DELETE => [CURLOPT_CUSTOMREQUEST, self::DELETE],
@@ -37,16 +35,15 @@ class ThgHostingClient
         self::PATCH  => [CURLOPT_CUSTOMREQUEST, self::PATCH],
     ];
 
-    /** @var string */
-    private $xApiToken;
+    private string $xApiToken;
 
-    protected $host = 'https://api.ingenuitycloudservices.com/rest-api/';
+    protected string $host = 'https://api.ingenuitycloudservices.com/rest-api/';
 
     /**
      * @param string      $xApiToken X-Api-Token required for any requests to THG Hosting Open API
      * @param int|null    $timeout
      * @param string|null $apiUrl
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function __construct(string $xApiToken, ?int $timeout = null, ?string $apiUrl = null)
     {
@@ -71,12 +68,12 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function setTimeout(int $timeout): self
     {
         if ($timeout < 0) {
-            throw new ThgHostingException('Timeout can\'t be lower then zero', 400);
+            throw new ClientException('Timeout can\'t be lower then zero', 400);
         }
         $this->timeout = $timeout;
         return $this;
@@ -90,8 +87,8 @@ class ThgHostingClient
      * @param array  $arguments Optional; Arguments to addtionally send
      * @param array  $files
      * @param string $contentType
-     * @return string|array            Result of request
-     * @throws ThgHostingException
+     * @return array Result of request
+     * @throws ClientException
      */
     public function request(
         string $method,
@@ -101,7 +98,7 @@ class ThgHostingClient
         string $contentType = self::CONTENT_JSON
     ): array {
         if (!$this->validateMethod($method)) {
-            throw new ThgHostingException(
+            throw new ClientException(
                 'Not allowed method used. Allowed: '
                 . implode(', ', array_keys($this->allowedMethods)),
                 405
@@ -139,15 +136,15 @@ class ThgHostingClient
                 // File encoded in base64 with all required information
                 if (\is_array($file)) {
                     if (!isset($file['file'])) {
-                        throw new ThgHostingException('File encoded into base64 was not found', 404);
+                        throw new ClientException('File encoded into base64 was not found', 404);
                     }
 
                     if (!isset($file['name'])) {
-                        throw new ThgHostingException('Name of the file was not found', 404);
+                        throw new ClientException('Name of the file was not found', 404);
                     }
 
                     if (!isset($file['mime'])) {
-                        throw new ThgHostingException('Mime type of file was not found', 404);
+                        throw new ClientException('Mime type of file was not found', 404);
                     }
 
                     $arguments['attachments'][] = [
@@ -158,7 +155,7 @@ class ThgHostingClient
                     continue;
                 }
 
-                throw new ThgHostingException(
+                throw new ClientException(
                     'Passed file wasn\'t a path or a stream, couldn\'t be send - cancelling request.',
                     400
                 );
@@ -186,7 +183,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getSsdVpsPlans(): array
     {
@@ -194,7 +191,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getSsdVpsLocations(): array
     {
@@ -202,13 +199,16 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getSsdVpsCustomTemplates(int $locationId): array
     {
         return $this->request(self::GET, "ssd-vps/locations/$locationId/templates/custom");
     }
 
+    /**
+     * @throws ClientException
+     */
     public function createSsdVpsServer(
         int     $locationId,
         string  $label,
@@ -249,7 +249,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getSsdVpsOses(int $locationId): array
     {
@@ -257,7 +257,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getSsdVpsServers(?int $locationId = null): array
     {
@@ -269,7 +269,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getSsdVpsServerDetails(int $locationId, int $serverId): array
     {
@@ -277,7 +277,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function deleteSsdVpsServer(int $locationId, int $serverId): array
     {
@@ -285,7 +285,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getSsdVpsServerStatus(int $locationId, int $serverId): array
     {
@@ -293,7 +293,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function powerOnSsdVpsServer(int $locationId, int $serverId): array
     {
@@ -301,7 +301,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function powerOffSsdVpsServer(int $locationId, int $serverId): array
     {
@@ -309,7 +309,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function rebootSsdVpsServer(int $locationId, int $serverId): array
     {
@@ -317,7 +317,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function rebootSsdVpsServerInRecoveryMode(int $locationId, int $serverId): array
     {
@@ -325,7 +325,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function resetSsdVpsServerPassword(int $locationId, int $serverId, ?string $newPassword = null): array
     {
@@ -342,7 +342,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getSsdVpsServerBackups(int $locationId, int $serverId): array
     {
@@ -350,7 +350,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function addSsdVpsBackupNote(
         int    $locationId,
@@ -368,7 +368,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function deleteSsdVpsBackup(int $locationId, int $serverId, int $backupId): array
     {
@@ -376,7 +376,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function restoreSsdVpsBackup(int $locationId, int $serverId, int $backupId): array
     {
@@ -384,7 +384,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getServiceDetails(int $serviceId): array
     {
@@ -392,7 +392,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getDnsZones(): array
     {
@@ -400,7 +400,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function createDnsZone(string $domainName, string $ip): array
     {
@@ -412,7 +412,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getDnsZoneDetails(int $zoneId): array
     {
@@ -420,7 +420,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function deleteDnsZone(int $zoneId): array
     {
@@ -428,7 +428,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function addRecordToDnsZone(
         int     $zoneId,
@@ -475,7 +475,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function updateDnsZoneRecord(
         int     $zoneId,
@@ -521,7 +521,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function deleteDnsZoneRecord(
         int $zoneId,
@@ -531,7 +531,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getServers(): array
     {
@@ -539,7 +539,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getServerDetails(string $serverId): array
     {
@@ -547,7 +547,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getServerBandwidthGraph(int $serverId, string $periodStart = null, string $periodEnd = null): array
     {
@@ -565,7 +565,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getTickets(): array
     {
@@ -573,7 +573,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function createTicket(
         string $body,
@@ -592,7 +592,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getTicketDepartments(): array
     {
@@ -600,7 +600,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getTicketDetails(int $ticketId): array
     {
@@ -608,7 +608,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function updateTicket(int $ticketId, int $priority = 0, bool $closeTicket = false): array
     {
@@ -624,7 +624,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function addReplyToTicket(int $ticketId, string $body, array $attachments = []): array
     {
@@ -639,7 +639,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getStatusUpdates(): array
     {
@@ -647,7 +647,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getDatacenters(): array
     {
@@ -655,7 +655,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getProductCategory(): array
     {
@@ -663,7 +663,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getProductsInCategory(int $locationId, int $categoryId): array
     {
@@ -671,7 +671,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getProductDetails(int $locationId, int $categoryId, int $productId): array
     {
@@ -679,7 +679,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getCalculatedPriceWithTax(array $body): array
     {
@@ -687,7 +687,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getPaymentMethods(): array
     {
@@ -695,7 +695,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function submitOrderForProcessing(array $body): array
     {
@@ -703,7 +703,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getServerIPMIDetails(string $serverId): array
     {
@@ -711,7 +711,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function createServerIPMICredentials(string $serverId): array
     {
@@ -719,7 +719,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function deleteServerIPMICredentials(string $serverId): array
     {
@@ -727,7 +727,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getServerPowerStatus(string $serverId): array
     {
@@ -735,7 +735,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function powerOnServer(string $serverId): array
     {
@@ -743,7 +743,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function powerOffServer(string $serverId): array
     {
@@ -751,7 +751,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function rebootServer(string $serverId): array
     {
@@ -759,7 +759,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function changeServerFriendlyName(string $serverId, array $body): array
     {
@@ -767,7 +767,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function setRDNSentryForIpAddress(string $serverId, string $ipAddress, array $body): array
     {
@@ -775,7 +775,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getBillingServices(
         ?bool   $showAddOns,
@@ -810,7 +810,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getBillingInvoices(?int $offset, ?int $limit): array
     {
@@ -828,7 +828,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getBillingServiceUpgrades(int $serviceId): array
     {
@@ -836,7 +836,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function upgradesService(
         int    $serviceId,
@@ -862,7 +862,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getUserList(): array
     {
@@ -870,7 +870,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getUserRoles(): array
     {
@@ -878,7 +878,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function getUser(): array
     {
@@ -886,7 +886,7 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
     public function addUser(
         string $email,
@@ -907,9 +907,9 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
-    public function getSSLCertificates(?int $offset, ?int $limit, bool $collected = false)
+    public function getSSLCertificates(?int $offset, ?int $limit, bool $collected = false): array
     {
         $params = [];
         if (!is_null($offset)) {
@@ -925,9 +925,9 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
-    public function createSSLCertificate(string $domain, string $csr)
+    public function createSSLCertificate(string $domain, string $csr): array
     {
         $params = [];
 
@@ -938,9 +938,9 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
-    public function applySSLCertificate(string $domain, string $csr, string $email, int $serverSoftware)
+    public function applySSLCertificate(string $domain, string $csr, string $email, int $serverSoftware): array
     {
         $params = [];
 
@@ -953,10 +953,60 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ThgHostingException
+     * @throws ClientException
      */
-    public function downloadSSLCertificate(int $certificateId)
+    public function downloadSSLCertificate(int $certificateId): array
     {
         return $this->request(self::GET, 'ssl/' . $certificateId . '/download');
+    }
+
+    /**
+     * Retrieves a list of MS licenses
+     *
+     * @param int $serviceId
+     * @return array
+     * @throws ClientException
+     */
+    public function getMicrosoftLicenses(int $serviceId): array
+    {
+        return $this->request(ThgHostingClient::GET, "/services/$serviceId/licenses");
+    }
+
+    /**
+     * Retrieves an MS license details
+     *
+     * @param int $serviceId
+     * @param int $licenseId
+     * @return array
+     * @throws ClientException
+     */
+    public function getMicrosoftLicenseDetails(int $serviceId, int $licenseId): array
+    {
+        return $this->request(ThgHostingClient::GET, "/services/$serviceId/licenses/$licenseId");
+    }
+
+    /**
+     * Deletes a MS license
+     *
+     * @param int $serviceId
+     * @param int $licenseId
+     * @return array
+     * @throws ClientException
+     */
+    public function deleteMicrosoftLicense(int $serviceId, int $licenseId): array
+    {
+        return $this->request(ThgHostingClient::DELETE, "/services/$serviceId/licenses/$licenseId");
+    }
+
+    /**
+     * Retrieves a list of available microsoft license products
+     *
+     * @param int $serviceId
+     * @return array
+     * @throws ClientException
+     */
+    public function getMicrosoftLicenseProducts(int $serviceId): array
+    {
+        return $this->request(ThgHostingClient::GET, "/services/$serviceId/ms-license-products");
     }
 }
