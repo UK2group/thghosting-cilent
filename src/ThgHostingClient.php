@@ -120,7 +120,7 @@ class ThgHostingClient
 
         $url = $this->host . trim($endpoint, '/') . '/';
 
-        if (\sizeof($files) > 0) {
+        if (!empty($files)) {
             $arguments['attachments'] = [];
             foreach ($files as $file) {
                 // Path to the file
