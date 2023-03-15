@@ -1,11 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace ThgHosting;
+namespace Unit\ThgHosting;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ThgHosting\Exceptions\ClientException;
 use ThgHosting\Request\HttpRequestInterface;
+use ThgHosting\ThgHostingClient;
 
 final class ThgHostingClientTest extends TestCase
 {
