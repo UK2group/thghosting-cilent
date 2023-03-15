@@ -12,6 +12,8 @@ declare(strict_types=1);
 namespace ThgHosting;
 
 use ThgHosting\Exceptions\ClientException;
+use ThgHosting\Request\CurlRequest;
+use ThgHosting\Request\HttpRequestInterface;
 
 /**
  * THG Hosting API Client
@@ -39,6 +41,8 @@ class ThgHostingClient
 
     protected string $host = 'https://api.ingenuitycloudservices.com/rest-api/';
 
+    protected HttpRequestInterface $request;
+
     /**
      * @param string      $xApiToken X-Api-Token required for any requests to THG Hosting Open API
      * @param int|null    $timeout
@@ -55,6 +59,7 @@ class ThgHostingClient
         if (!empty($apiUrl)) {
             $this->host = $apiUrl;
         }
+        $this->setRequest();
     }
 
     private function validateMethod(string $method): bool
@@ -76,6 +81,16 @@ class ThgHostingClient
             throw new ClientException('Timeout can\'t be lower then zero', 400);
         }
         $this->timeout = $timeout;
+        return $this;
+    }
+
+    public function setRequest(?HttpRequestInterface $request = null): self
+    {
+        if (!$request) {
+            $this->request = new CurlRequest($this->host);
+        } else {
+            $this->request = $request;
+        }
         return $this;
     }
 
@@ -111,12 +126,11 @@ class ThgHostingClient
             'Content-Type: ' . $contentType,
             'Accept: application/json',
         ];
-        $curl          = curl_init();
 
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
-        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($curl, ...$requestParams);
+        $this->request->setOption(CURLOPT_RETURNTRANSFER, true)
+                      ->setOption(CURLOPT_TIMEOUT, $this->timeout)
+                      ->setOption(CURLOPT_FOLLOWLOCATION, true)
+                      ->setOption(...$requestParams);
 
         $url = $this->host . trim($endpoint, '/') . '/';
 
@@ -162,22 +176,21 @@ class ThgHostingClient
             }
         }
 
-        if ($method === self::GET && !\empty($arguments)) {
+        if ($method === self::GET && !empty($arguments)) {
             $url .= '?' . \http_build_query($arguments);
         } else {
             $arguments = \json_encode($arguments);
-            \curl_setopt($curl, CURLOPT_POSTFIELDS, $arguments);
+            $this->request->setOption(CURLOPT_POSTFIELDS, $arguments);
             $headers[] = 'Content-Length: ' . \strlen($arguments);
         }
-        \curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-
-        \curl_setopt($curl, CURLOPT_URL, $url);
-        $result   = \curl_exec($curl);
-        $curlInfo = \curl_getinfo($curl);
-        \curl_close($curl);
+        $this->request->setOption(CURLOPT_HTTPHEADER, $headers)
+                      ->setOption(CURLOPT_URL, $url);
+        $result   = $this->request->execute();
+        $curlInfo = $this->request->getInfo(null);
+        $this->request->close();
 
         return [
-            'data' => gettype($result) == 'string' ? (\json_decode($result, true) ?? $result) : $result,
+            'data' => \gettype($result) == 'string' ? (\json_decode($result, true) ?? $result) : $result,
             'info' => $curlInfo,
         ];
     }
