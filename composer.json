@@ -17,5 +17,10 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"
+    },
+    "scripts": {
+        "unit-tests": [
+            "php ./vendor/phpunit/phpunit/phpunit --verbose"
+        ]
     }
 }
