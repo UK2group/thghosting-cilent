@@ -19,13 +19,13 @@
             <directory suffix=".php">src</directory>
         </include>
         <report>
-            <html outputDirectory="./reports/coverage" />
-            <text outputFile="./reports/coverage.txt" showOnlySummary="true"/>
-            <clover outputFile="./reports/coverage.xml"/>
+            <html outputDirectory="./tests/reports/coverage" />
+            <text outputFile="./tests/reports/coverage.txt" showOnlySummary="true"/>
+            <clover outputFile="./tests/reports/coverage.xml"/>
         </report>
     </coverage>
 
     <logging>
-        <junit outputFile="./reports/junit.xml"/>
+        <junit outputFile="./tests/reports/junit.xml"/>
     </logging>
 </phpunit>

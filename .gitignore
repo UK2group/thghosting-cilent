@@ -8,5 +8,4 @@
 /examples/.env
 
 # Tests
-/reports
 .phpunit.result.cache
