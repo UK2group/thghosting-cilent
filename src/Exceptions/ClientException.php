@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /**
- * (c) The Hut Group 2001-2022, All Rights Reserved.
+ * (c) The Hut Group 2001-2023, All Rights Reserved.
  *
  * This source code is the property of The Hut Group, registered address:
  *
@@ -8,7 +8,7 @@
  * Manchester, England, M90 3DQ
  * @author Michal Dzierzbicki <michal.dzierzbicki@thg.com>
  */
-namespace ThgHosting;
+namespace ThgHosting\Exceptions;
 
-final class ThgHostingException extends \Exception
+final class ClientException extends \Exception
 {}
