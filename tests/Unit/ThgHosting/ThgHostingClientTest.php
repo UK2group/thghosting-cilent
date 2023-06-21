@@ -286,7 +286,6 @@ final class ThgHostingClientTest extends TestCase
                         "operating_system_distro": "ubuntu",
                         "note": null,
                         "suspended": false,
-                        "local_remote_access_ip_address": "191.115.116.19",
                         "domain": "localdomain",
                         "ip_addresses": [
                           {
