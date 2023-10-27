@@ -727,3 +727,44 @@ composer require thg/thg-client
         int $serviceId,      // Server service ID to get a list of license products
     );
 ```
+
+## List SSH keys Data
+*Returns A List Of SSH Keys*
+```php
+    $thgHostingClient->listSshKeys();
+```
+
+## Add An SSH Key
+*Creates New SSH Key Record*
+```php
+    $thgHostingClient->createSshKey(
+        string $key,        // Public RSA Key to be stored
+        string $label,      // Label for SSH Key
+    );
+```
+
+## Update Label For An Existing SSH Key
+*Updates Label For SSH Key Given Id*
+```php
+    $thgHostingClient->updateSshKeyLabel(
+        int $sshId,         // The ID for the SSH Key to be updated
+        string $label,      // The new label for the SSH Key
+    );
+```
+
+## Delete An SSH Key
+*Delete An SSH Key Of The Given Id*
+```php
+    $thgHostingClient->deleteSshKey(
+        int $sshId,         // The ID of the SSH Key to be deleted
+    );
+    );
+```
+
+## Get An SSH Key With Id
+*Returns An SSH Key Given Id*
+```php
+    $thgHostingClient->getSshKeyById(
+        int $sshId,      // The ID of the SSH Key to be fetched
+    );
+```
