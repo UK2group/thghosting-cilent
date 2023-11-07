@@ -1022,4 +1022,72 @@ class ThgHostingClient
     {
         return $this->request(ThgHostingClient::GET, "/services/$serviceId/ms-license-products");
     }
+
+    /**
+     * Get SSH keys data
+     *
+     * @return array
+     * @throws ClientException
+     */
+    public function listSshKeys(): array
+    {
+        return $this->request(ThgHostingClient::GET, "/ssh-keys");
+    }
+
+    /**
+     * Add an SSH key
+     *
+     * @param string $key
+     * @param string $label
+     * @return array
+     * @throws ClientException
+     */
+    public function createSshKey(string $key, string $label): array
+    {
+        $params = [
+            'public_key'       => $key,
+            'label'    => $label,
+        ];
+        return $this->request(ThgHostingClient::POST, "/ssh-keys", $params);
+    }
+
+    /**
+     * Update an SSH key label
+     *
+     * @param int    $sshId
+     * @param string $label
+     * @return array
+     * @throws ClientException
+     */
+    public function updateSshKeyLabel(int $sshId, string $label): array
+    {
+        $params = [
+            'label'    => $label,
+        ];
+        return $this->request(ThgHostingClient::PUT, "/ssh-keys/$sshId", $params);
+    }
+
+    /**
+     * Delete an SSH key
+     *
+     * @param int $sshId
+     * @return array
+     * @throws ClientException
+     */
+    public function deleteSshKey(int $sshId): array
+    {
+        return $this->request(ThgHostingClient::DELETE, "/ssh-keys/$sshId");
+    }
+
+    /**
+     * Get an SSH key with id
+     *
+     * @param int $sshId
+     * @return array
+     * @throws ClientException
+     */
+    public function getSshKeyById(int $sshId): array
+    {
+        return $this->request(ThgHostingClient::GET, "/ssh-keys/$sshId");
+    }
 }

@@ -337,4 +337,91 @@ final class ThgHostingClientTest extends TestCase
         $result = $this->client->getSsdVpsServerStatus(1, 509);
         $this->assertEquals(1, $result['data']['data']['status']);
     }
+
+    public function testCreateSshKey()
+    {
+        $this->requestMock->method('execute')->will($this->returnValue(
+            '{
+                "status_code": 200,
+                "message": "SSH Key created for customer: 1",
+                "data": {
+                    "id": 1
+                }
+            }'
+        ));
+        $result = $this->client->createSshKey(
+            'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQC7d0ZIxXqrxqoPIgN0B6yGByH6q0VW8RDrxI4yBR2iLr93xQ2z9usIH3hZhhSHjxOME8YB78HOkYtFXtPyz603eWFsO/jQAHn8A9GSlfDIEBpMjU0xhV5IVRP+IVcMqUN1ZjPDKnD5Rx2krgdDfcpWiaeL5VGLXO3wwQp8Y+nZNw== test@example.com',
+            'My SSH Key'
+        );
+        $this->assertStringContainsString('SSH Key created for customer', $result['data']['message']);
+    }
+
+    public function testListSshKeys()
+    {
+        $this->requestMock->method('execute')->will($this->returnValue(
+            '{
+                      "statusCode": 200,
+                      "message": "List of SSH Keys for the customer: 1",
+                      "data": [
+                        {
+                            "id": 1,
+                            "label": "My SSH Key",
+                            "key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQC7d0ZIxXqrxqoPIgN0B6yGByH6q0VW8RDrxI4yBR2iLr93xQ2z9usIH3hZhhSHjxOME8YB78HOkYtFXtPyz603eWFsO/jQAHn8A9GSlfDIEBpMjU0xhV5IVRP+IVcMqUN1ZjPDKnD5Rx2krgdDfcpWiaeL5VGLXO3wwQp8Y+nZNw== test@example.com",
+                            "created_at": 1698660518,
+                            "updated_at": 1698660957
+                        }
+                      ]
+                   }'
+        ));
+        $result = $this->client->listSshKeys();
+        $this->assertEquals(1, $result['data']['data'][0]['id']);
+    }
+
+    public function testGetSshKeyById()
+    {
+        $this->requestMock->method('execute')->will($this->returnValue(
+            '{
+                "statusCode": 200,
+                "message": "Ssh Key with id 1",
+                "data": {
+                    "id": 1,
+                    "label": "My SSH Key",
+                    "key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQC7d0ZIxXqrxqoPIgN0B6yGByH6q0VW8RDrxI4yBR2iLr93xQ2z9usIH3hZhhSHjxOME8YB78HOkYtFXtPyz603eWFsO/jQAHn8A9GSlfDIEBpMjU0xhV5IVRP+IVcMqUN1ZjPDKnD5Rx2krgdDfcpWiaeL5VGLXO3wwQp8Y+nZNw== test@example.com",
+                    "created_at": 1698660518,
+                    "updated_at": 1698660957
+                }
+            }'
+        ));
+        $result = $this->client->getSshKeyById(1);
+        $this->assertEquals(1, $result['data']['data']['id']);
+    }
+
+    public function testUpdateSshKeyLabel()
+    {
+        $this->requestMock->method('execute')->will($this->returnValue(
+            '{
+                "status_code": 200,
+                "message": "Label for SSH key was successfully updated"
+            }'
+        ));
+        $result = $this->client->updateSshKeyLabel(
+            1,
+            'My SSH Key (updated)'
+        );
+        $this->assertEquals('Label for SSH key was successfully updated', $result['data']['message']);
+    }
+
+    public function testDeleteSshKey()
+    {
+        $this->requestMock->method('execute')->will($this->returnValue(
+            '{
+                "status_code": 200,
+                "message": "Ssh Key with label My SSH Key was successfully removed"
+            }'
+        ));
+        $result = $this->client->deleteSshKey(
+            1
+        );
+        $this->assertStringContainsString('successfully removed', $result['data']['message']);
+    }
 }
