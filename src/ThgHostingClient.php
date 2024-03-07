@@ -1090,4 +1090,16 @@ class ThgHostingClient
     {
         return $this->request(ThgHostingClient::GET, "/ssh-keys/$sshId");
     }
+
+
+    /**
+     * Get server inventory list
+     *
+     * @return array
+     * @throws ClientException
+     */
+    public function getServerInventory(): array
+    {
+       return $this->request(ThgHostingClient::GET, "server-orders/inventory");
+    }
 }
