@@ -772,5 +772,24 @@ composer require thg/thg-client
 ## Get list of server inventory
 *Returns server inventory list*
 ```php
-    $thgHostingClient->getServerInventory();
+    $thgHostingClient->getServerInventory(
+        ?int $datacenterId,
+        ?string $cpuBrand,
+        ?int $minCpuCores,
+        ?int $maxCpuCores,
+        ?float $minCpuSpeed,
+        ?float $maxCpuSpeed,
+        ?int $minRam,
+        ?int $maxRam,
+        ?string $storageType,
+        ?int $minStorage,
+        ?int $maxStorage,
+        ?int $minNic,
+        ?int $maxNic,
+        ?float $minPrice,
+        ?float $maxPrice,
+        ?bool $raidEnabled,
+        ?string $sortBy,
+        ?string $direction
+    );
 ```
