@@ -1095,11 +1095,120 @@ class ThgHostingClient
     /**
      * Get server inventory list
      *
+     * @param int|null    $datacenterId
+     * @param string|null $cpuBrand
+     * @param int|null    $minCpuCores
+     * @param int|null    $maxCpuCores
+     * @param float|null  $minCpuSpeed
+     * @param float|null  $maxCpuSpeed
+     * @param int|null    $minRam
+     * @param int|null    $maxRam
+     * @param string|null $storageType
+     * @param int|null    $minStorage
+     * @param int|null    $maxStorage
+     * @param int|null    $minNic
+     * @param int|null    $maxNic
+     * @param float|null  $minPrice
+     * @param float|null  $maxPrice
+     * @param bool|null   $raidEnabled
+     * @param string|null $sortBy
+     * @param string|null $direction
      * @return array
      * @throws ClientException
      */
-    public function getServerInventory(): array
+    public function getServerInventory(
+        ?int $datacenterId,
+        ?string $cpuBrand,
+        ?int $minCpuCores,
+        ?int $maxCpuCores,
+        ?float $minCpuSpeed,
+        ?float $maxCpuSpeed,
+        ?int $minRam,
+        ?int $maxRam,
+        ?string $storageType,
+        ?int $minStorage,
+        ?int $maxStorage,
+        ?int $minNic,
+        ?int $maxNic,
+        ?float $minPrice,
+        ?float $maxPrice,
+        ?bool $raidEnabled,
+        ?string $sortBy,
+        ?string $direction
+    ): array
     {
-       return $this->request(ThgHostingClient::GET, "server-orders/inventory");
+        $params = [];
+
+        if(!is_null($datacenterId)){
+            $params['datacenter_id'] = $datacenterId;
+        }
+        if (!is_null($cpuBrand)) {
+            $params['cpu_brand'] = $cpuBrand;
+        }
+
+        if (!is_null($minCpuCores)) {
+            $params['min_cpu_cores'] = $minCpuCores;
+        }
+
+        if (!is_null($maxCpuCores)) {
+            $params['max_cpu_cores'] = $maxCpuCores;
+        }
+
+        if (!is_null($minCpuSpeed)) {
+            $params['min_cpu_speed'] = $minCpuSpeed;
+        }
+
+        if (!is_null($maxCpuSpeed)) {
+            $params['max_cpu_speed'] = $maxCpuSpeed;
+        }
+
+        if (!is_null($minRam)) {
+            $params['min_ram'] = $minRam;
+        }
+
+        if (!is_null($maxRam)) {
+            $params['max_ram'] = $maxRam;
+        }
+
+        if (!is_null($storageType)) {
+            $params['storage_type'] = $storageType;
+        }
+
+        if (!is_null($minStorage)) {
+            $params['min_storage'] = $minStorage;
+        }
+
+        if (!is_null($maxStorage)) {
+            $params['max_storage'] = $maxStorage;
+        }
+
+        if (!is_null($minNic)) {
+            $params['min_nic'] = $minNic;
+        }
+
+        if (!is_null($maxNic)) {
+            $params['max_nic'] = $maxNic;
+        }
+
+        if (!is_null($minPrice)) {
+            $params['min_price'] = $minPrice;
+        }
+
+        if (!is_null($maxPrice)) {
+            $params['max_price'] = $maxPrice;
+        }
+
+        if (!is_null($raidEnabled)) {
+            $params['raid_enabled'] = $raidEnabled;
+        }
+
+        if (!is_null($sortBy)) {
+            $params['sort_by'] = $sortBy;
+        }
+
+        if (!is_null($direction)) {
+            $params['direction'] = $direction;
+        }
+       return $this->request(ThgHostingClient::GET, "server-orders/inventory", $params);
     }
 }
