@@ -1117,24 +1117,24 @@ class ThgHostingClient
      * @throws ClientException
      */
     public function getServerInventory(
-        ?int $datacenterId,
-        ?string $cpuBrand,
-        ?int $minCpuCores,
-        ?int $maxCpuCores,
-        ?float $minCpuSpeed,
-        ?float $maxCpuSpeed,
-        ?int $minRam,
-        ?int $maxRam,
-        ?string $storageType,
-        ?int $minStorage,
-        ?int $maxStorage,
-        ?int $minNic,
-        ?int $maxNic,
-        ?float $minPrice,
-        ?float $maxPrice,
-        ?bool $raidEnabled,
-        ?string $sortBy,
-        ?string $direction
+        ?int    $datacenterId = null,
+        ?string $cpuBrand = null,
+        ?int    $minCpuCores = null,
+        ?int    $maxCpuCores = null,
+        ?float  $minCpuSpeed = null,
+        ?float  $maxCpuSpeed = null,
+        ?int    $minRam = null,
+        ?int    $maxRam = null,
+        ?string $storageType = null,
+        ?int    $minStorage = null,
+        ?int    $maxStorage = null,
+        ?int    $minNic = null,
+        ?int    $maxNic = null,
+        ?float  $minPrice = null,
+        ?float  $maxPrice = null,
+        ?bool   $raidEnabled = null,
+        ?string $sortBy = null,
+        ?string $direction = null
     ): array
     {
         $params = [];
