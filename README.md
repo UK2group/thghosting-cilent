@@ -768,3 +768,28 @@ composer require thg/thg-client
         int $sshId,      // The ID of the SSH Key to be fetched
     );
 ```
+
+## Get list of server inventory
+*Returns server inventory list*
+```php
+    $thgHostingClient->getServerInventory(
+        ?int $datacenterId = null,
+        ?string $cpuBrand = null,
+        ?int $minCpuCores = null,
+        ?int $maxCpuCores = null,
+        ?float $minCpuSpeed = null,
+        ?float $maxCpuSpeed = null,
+        ?int $minRam = null,
+        ?int $maxRam = null,
+        ?string $storageType = null,
+        ?int $minStorage = null,
+        ?int $maxStorage = null,
+        ?int $minNic = null,
+        ?int $maxNic = null,
+        ?float $minPrice = null,
+        ?float $maxPrice = null,
+        ?bool $raidEnabled = null,
+        ?string $sortBy = null,
+        ?string $direction = null
+    );
+```
