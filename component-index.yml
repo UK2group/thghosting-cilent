@@ -7,8 +7,3 @@ ownership:
 staticanalysis:
   instance: sonarqube-storm.l3pjg.icekube.ics.cloud
   key: thghosting-cilent
-dependencyanalysis:
-  type: snyk
-  snykprojectids:
-    - b50f4fc5-b66c-40d6-85c1-7c778ff5c884
-
