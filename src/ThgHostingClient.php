@@ -1211,4 +1211,67 @@ class ThgHostingClient
         }
        return $this->request(ThgHostingClient::GET, "server-orders/inventory", $params);
     }
+
+    /**
+     * @param string      $sku_product_name
+     * @param int         $quantity
+     * @param string      $location_code
+     * @param string      $operating_system
+     * @param string|null $license
+     * @param int|null    $bandwidth
+     * @param array|null  $ssh_keys
+     * @param string|null $support_level
+     * @return array
+     * @throws ClientException
+     */
+    public function createBareMetalServerOrder(
+        string $sku_product_name,
+        int $quantity,
+        string $location_code,
+        string $operating_system,
+        ?string $license = null,
+        ?int $bandwidth = null,
+        ?array $ssh_keys = null,
+        ?string $support_level = null
+    ): array
+    {
+        $params = [
+            'sku_product_name' => $sku_product_name,
+            'quantity' => $quantity,
+            'location_code' => $location_code,
+            'operating_system' => $operating_system,
+        ];
+
+        if (!is_null($license)) {
+            $params['license'] = $license;
+        }
+
+        if (!is_null($bandwidth)) {
+            $params['bandwidth'] = $bandwidth;
+        }
+
+        if (!is_null($ssh_keys)) {
+            $params['ssh_keys'] = $ssh_keys;
+        }
+
+        if (!is_null($support_level)) {
+            $params['support_level'] = $support_level;
+        }
+        return $this->request(ThgHostingClient::POST, "server-orders/order", $params);
+    }
+
+    /**
+     * @param string $sku_product_name
+     * @param string $location_code
+     * @return array
+     * @throws ClientException
+     */
+    public function listAvailableBareMetalAddons (string $sku_product_name, string $location_code):array
+    {
+        $params = [
+            'sku_product_name' => $sku_product_name,
+            'location_code' => $location_code
+        ];
+        return $this->request(ThgHostingClient::GET, "server-orders/list-addons", $params);
+    }
 }

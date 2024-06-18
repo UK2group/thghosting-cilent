@@ -793,3 +793,26 @@ composer require thg/thg-client
         ?string $direction = null
     );
 ```
+
+# Create new bare metal server order
+*Creates new bare metal server order*
+```php
+    $thgHostingClient->createBareMetalServerOrder(
+        string $sku_product_name,
+        int $quantity,
+        string $location_code,
+        string $operating_system,
+        ?string $license = null,
+        ?int $bandwidth = null,
+        ?array $ssh_keys = null,
+        ?string $support_level = null
+    );
+```
+# List Available addons for bare metal server order
+*Returns list of all available addons for a bare metal server*
+```php
+    $thgHostingClient->listAvailableBareMetalAddons(
+        string $sku_product_name, 
+        string $location_code
+    );
+```
