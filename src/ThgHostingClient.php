@@ -2,7 +2,7 @@
 /** @noinspection PhpFullyQualifiedNameUsageInspection */
 declare(strict_types=1);
 /**
- * (c) The Hut Group 2001-2023, All Rights Reserved.
+ * (c) The Hut Group 2001-2024, All Rights Reserved.
  *
  * This source code is the property of The Hut Group, registered address:
  *
@@ -39,8 +39,7 @@ class ThgHostingClient
 
     private string $xApiToken;
 
-    protected string $host = 'http://api.thghosting.st.io.thehut.local/rest-api/';
-    // protected string $host = 'https://api.ingenuitycloudservices.com/rest-api/';
+    protected string $host = 'https://api.ingenuitycloudservices.com/rest-api/';
 
     protected HttpRequestInterface $request;
 
