@@ -39,7 +39,8 @@ class ThgHostingClient
 
     private string $xApiToken;
 
-    protected string $host = 'https://api.ingenuitycloudservices.com/rest-api/';
+    protected string $host = 'http://api.thghosting.st.io.thehut.local/rest-api/';
+    // protected string $host = 'https://api.ingenuitycloudservices.com/rest-api/';
 
     protected HttpRequestInterface $request;
 
@@ -575,6 +576,29 @@ class ThgHostingClient
         }
 
         return $this->request(self::GET, "servers/$serverId/bandwidth-graph", $params);
+    }
+
+    /**
+     * @throws ClientException
+     */
+    public function getServerOsList(int $serverId): array
+    {
+        return $this->request(self::GET, "servers/$serverId/provision/os-list");
+    }
+
+    /**
+     * @throws ClientException
+     */
+    public function reimageServer(int $serverId, string $osCode, string $reason = null): array
+    {
+        return $this->request(
+            self::POST,
+            "servers/$serverId/provision/reload-os",
+            [
+                'os_image_id' => $osCode,
+                'reason'  => $reason,
+            ]
+        );
     }
 
     /**
