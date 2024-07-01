@@ -424,4 +424,45 @@ final class ThgHostingClientTest extends TestCase
         );
         $this->assertStringContainsString('successfully removed', $result['data']['message']);
     }
+
+    public function testGetServerOsList()
+    {
+        $this->requestMock->method('execute')->will($this->returnValue(
+            '{
+            "status_code": 200,
+            "message": "List of Server OS",
+            "data": [
+                {
+                    "id": "centos_6_9_x64",
+                    "name": "Centos 6.9",
+                    "version": null,
+                    "licenses": []
+                },
+                {
+                    "id": "centos_7_4_x64",
+                    "name": "Centos 7.4",
+                    "version": null,
+                    "licenses": []
+                }
+            ]
+        }'
+        ));
+        $result = $this->client->getServerOsList(1);
+        $this->assertEquals('centos_6_9_x64', $result['data']['data'][0]['id']);
+    }
+
+    public function testReimageServer()
+    {
+        $this->requestMock->method('execute')->will($this->returnValue(
+            '{
+            "status_code": 200,
+            "message": "Server Re-Image Request",
+            "data": {
+                "success": true
+            }
+        }'
+        ));
+        $result = $this->client->reimageServer(1, 'centos_6_9_x64');
+        $this->assertTrue($result['data']['data']['success']);
+    }
 }

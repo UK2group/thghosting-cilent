@@ -2,7 +2,7 @@
 /** @noinspection PhpFullyQualifiedNameUsageInspection */
 declare(strict_types=1);
 /**
- * (c) The Hut Group 2001-2023, All Rights Reserved.
+ * (c) The Hut Group 2001-2024, All Rights Reserved.
  *
  * This source code is the property of The Hut Group, registered address:
  *
@@ -575,6 +575,29 @@ class ThgHostingClient
         }
 
         return $this->request(self::GET, "servers/$serverId/bandwidth-graph", $params);
+    }
+
+    /**
+     * @throws ClientException
+     */
+    public function getServerOsList(int $serverId): array
+    {
+        return $this->request(self::GET, "servers/$serverId/provision/os-list");
+    }
+
+    /**
+     * @throws ClientException
+     */
+    public function reimageServer(int $serverId, string $osCode, string $reason = null): array
+    {
+        return $this->request(
+            self::POST,
+            "servers/$serverId/provision/reload-os",
+            [
+                'os_image_id' => $osCode,
+                'reason'  => $reason,
+            ]
+        );
     }
 
     /**
