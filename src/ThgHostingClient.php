@@ -1234,4 +1234,62 @@ class ThgHostingClient
         }
        return $this->request(ThgHostingClient::GET, "server-orders/inventory", $params);
     }
+
+    /**
+     * @param string      $sku_product_name
+     * @param int         $quantity
+     * @param string      $location_code
+     * @param string      $operating_system_product_code
+     * @param string|null $license_product_code
+     * @param int|null    $additional_bandwidth_tb
+     * @param array|null  $ssh_keys
+     * @param string|null $support_level_product_code
+     * @return array
+     * @throws ClientException
+     */
+    public function createBareMetalServerOrder(
+        string  $sku_product_name,
+        int     $quantity,
+        string  $location_code,
+        string  $operating_system_product_code,
+        ?string $license_product_code = null,
+        ?int    $additional_bandwidth_tb = null,
+        ?string $support_level_product_code = null
+    ): array
+    {
+        $params = [
+            'sku_product_name' => $sku_product_name,
+            'quantity' => $quantity,
+            'location_code' => $location_code,
+            'operating_system_product_code' => $operating_system_product_code,
+        ];
+
+        if (!is_null($license_product_code)) {
+            $params['license_product_code'] = $license_product_code;
+        }
+
+        if (!is_null($additional_bandwidth_tb)) {
+            $params['additional_bandwidth_tb'] = $additional_bandwidth_tb;
+        }
+
+        if (!is_null($support_level_product_code)) {
+            $params['support_level_product_code'] = $support_level_product_code;
+        }
+        return $this->request(ThgHostingClient::POST, "server-orders/order", $params);
+    }
+
+    /**
+     * @param string $sku_product_name
+     * @param string $location_code
+     * @return array
+     * @throws ClientException
+     */
+    public function listAvailableBareMetalAddons (string $sku_product_name, string $location_code):array
+    {
+        $params = [
+            'sku_product_name' => $sku_product_name,
+            'location_code' => $location_code
+        ];
+        return $this->request(ThgHostingClient::GET, "server-orders/list-addons", $params);
+    }
 }
