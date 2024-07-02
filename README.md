@@ -801,11 +801,10 @@ composer require thg/thg-client
         string $sku_product_name,
         int $quantity,
         string $location_code,
-        string $operating_system,
-        ?string $license = null,
-        ?int $bandwidth = null,
-        ?array $ssh_keys = null,
-        ?string $support_level = null
+        string $operating_system_product_code, //Find available OS product codes by calling the list addons endpoint
+        ?string $license_product_code = null, //Find available license product codes by calling the list addons endpoint
+        ?int $additional_bandwidth_tb = null, 
+        ?string $support_level_product_code = null //Find available managed support product codes by calling the list addons endpoint
     );
 ```
 # List Available addons for bare metal server order
