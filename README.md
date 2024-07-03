@@ -798,20 +798,20 @@ composer require thg/thg-client
 *Creates new bare metal server order*
 ```php
     $thgHostingClient->createBareMetalServerOrder(
-        string $sku_product_name,
+        string $skuProductName,
         int $quantity,
-        string $location_code,
-        string $operating_system_product_code, //Find available OS product codes by calling the list addons endpoint
-        ?string $license_product_code = null, //Find available license product codes by calling the list addons endpoint
-        ?int $additional_bandwidth_tb = null, 
-        ?string $support_level_product_code = null //Find available managed support product codes by calling the list addons endpoint
+        string $locationCode,
+        string $operatingSystemProductCode,     //Find available OS product codes by calling the list addons endpoint
+        ?string $licenseProductCode = null,     //Find available license product codes by calling the list addons endpoint
+        ?int $additionalBandwidthTb = null, 
+        ?string $supportLevelProductCode = null //Find available managed support product codes by calling the list addons endpoint
     );
 ```
 # List Available addons for bare metal server order
 *Returns list of all available addons for a bare metal server*
 ```php
     $thgHostingClient->listAvailableBareMetalAddons(
-        string $sku_product_name, 
-        string $location_code
+        string $skuProductName, 
+        string $locationCode
     );
 ```
