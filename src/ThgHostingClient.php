@@ -580,6 +580,29 @@ class ThgHostingClient
     /**
      * @throws ClientException
      */
+    public function getServerOsList(int $serverId): array
+    {
+        return $this->request(self::GET, "servers/$serverId/provision/os-list");
+    }
+
+    /**
+     * @throws ClientException
+     */
+    public function reimageServer(int $serverId, string $osCode, string $reason = null): array
+    {
+        return $this->request(
+            self::POST,
+            "servers/$serverId/provision/reload-os",
+            [
+                'os_image_id' => $osCode,
+                'reason'  => $reason,
+            ]
+        );
+    }
+
+    /**
+     * @throws ClientException
+     */
     public function getTickets(): array
     {
         return $this->request(self::GET, self::TICKETS_ENDPOINT);

@@ -392,6 +392,26 @@ composer require thg/thg-client
     );
 ```
 
+## Get Server OS List
+*Get a list of available operating systems for provisioning a specific server.*
+
+```php
+    $thgHostingClient->getServerOsList(
+        int $serverId // ID of the Server (see “Get Servers”)
+    );
+```
+
+## Reimage Server
+*Reimage a server with a new operating system.*
+
+```php
+    $thgHostingClient->reimageServer(
+        int    $serverId,       // ID of the Server (see “Get Servers”)
+        string $osCode,         // Code of the OS to reimage the server with (see “Get Server OS List”)
+        string $reason = null   // Optional. Reason for reimage
+    );
+```
+
 ## Get IPMI details for server
 *Get IPMI details for server.*
 
