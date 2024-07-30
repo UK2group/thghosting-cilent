@@ -226,18 +226,16 @@ class ThgHostingClient
         int     $locationId,
         string  $label,
         string  $hostname,
-        string  $password,
-        int     $servicePlanId,
+        string  $productName,
         ?string $osComponentCode = null,
         ?bool   $backups = null,
         ?bool   $billHourly = null,
         ?int    $customTemplateId = null
     ): array {
         $params = [
-            'label'           => $label,
-            'hostname'        => $hostname,
-            'password'        => $password,
-            'service_plan_id' => $servicePlanId,
+            'label'       => $label,
+            'hostname'    => $hostname,
+            'product_name' => $productName,
         ];
 
         if (!\is_null($customTemplateId)) {
@@ -246,12 +244,12 @@ class ThgHostingClient
             $params['os_component_code'] = $osComponentCode;
         }
 
-        if (!\is_null($billHourly)) {
-            $params['bill_hourly'] = $billHourly ? 1 : 0;
+        if (isset($billHourly)) {
+            $params['bill_hourly'] = $billHourly;
         }
 
-        if (!\is_null($backups)) {
-            $params['backups'] = $backups ? 1 : 0;
+        if (isset($backups)) {
+            $params['backups'] = $backups;
         }
 
         return $this->request(
