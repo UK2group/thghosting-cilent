@@ -812,3 +812,25 @@ composer require thg/thg-client
         ?string $direction = null
     );
 ```
+
+# Create new bare metal server order
+*Creates new bare metal server order*
+```php
+    $thgHostingClient->createBareMetalServerOrder(
+        string $skuProductName,
+        int $quantity,
+        string $locationCode,
+        string $operatingSystemProductCode,     //Find available OS product codes by calling the list addons endpoint
+        ?string $licenseProductCode = null,     //Find available license product codes by calling the list addons endpoint
+        ?int $additionalBandwidthTb = null, 
+        ?string $supportLevelProductCode = null //Find available managed support product codes by calling the list addons endpoint
+    );
+```
+# List Available addons for bare metal server order
+*Returns list of all available addons for a bare metal server*
+```php
+    $thgHostingClient->listAvailableBareMetalAddons(
+        string $skuProductName, 
+        string $locationCode
+    );
+```
