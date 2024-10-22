@@ -594,56 +594,99 @@ composer require thg/thg-client
         ?int $limit         //If set, limits the number of records
     );
 ```
-## Get SSL Certificates
-*Returns SSL Certificates*
 
-```php
-    $thgHostingClient->getSSLCertificates(
-        ?int $offset,                     //If set, returns records starting from this offset
-        ?int $limit                       //If set, limits the number of records
-        bool $collected = false           //If true, returns only collected certificates
-    );
-```
+[//]: # (## Get SSL Certificates)
 
-## Create an SSL Certificate
-*This method serves two purposes; it validates the CSR and other needed fields, as well as returns possible domain control validation (DCV) email addresses, which are needed to validate domain ownership. These emails are returned in the 'text' array of successful calls*
+[//]: # (*Returns SSL Certificates*)
 
-```php
-    $thgHostingClient->createSSLCertificate(
-        string $domain, //FQDN for which the SSL is being requested for
-        string $csr     //CSR generated for the request
-    );
-```
+[//]: # ()
+[//]: # (```php)
 
-## Apply an SSL Certificate
-*This method serves two purposes; it validates the CSR and other needed fields, as well as returns possible domain control validation (DCV) email addresses, which are needed to validate domain ownership. These emails are returned in the 'text' array of successful calls*
+[//]: # (    $thgHostingClient->getSSLCertificates&#40;)
 
-```php
-    $thgHostingClient->applySSLCertificate(
-        string $domain,         //FQDN for which the SSL is being requested for
-        string $csr,            //CSR generated for the request
-        string $email,          //Verification email address provided by createSSLCertificate()
-        int $serverSoftware     //Type of server
-                                //2 - Apache
-                                //10 - Java-based servers
-                                //14 - Microsoft IIS 5.x to 6.x
-                                //35 - Microsoft IIS 7.x and later
-                                //36 - nginx
-                                //18 - Oracle
-                                //30 - Plesk
-                                //31 - WHM/cPanel
-                                //-1 - OTHER
-    );
-```
+[//]: # (        ?int $offset,                     //If set, returns records starting from this offset)
 
-## Download an SSL Certificate
-*Downloads an SSL Certificate*
+[//]: # (        ?int $limit                       //If set, limits the number of records)
 
-```php
-    $thgHostingClient->downloadSSLCertificate(
-        int $certificateId  //ID of the SSL certificate
-    );
-```
+[//]: # (        bool $collected = false           //If true, returns only collected certificates)
+
+[//]: # (    &#41;;)
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # (## Create an SSL Certificate)
+
+[//]: # (*This method serves two purposes; it validates the CSR and other needed fields, as well as returns possible domain control validation &#40;DCV&#41; email addresses, which are needed to validate domain ownership. These emails are returned in the 'text' array of successful calls*)
+
+[//]: # ()
+[//]: # (```php)
+
+[//]: # (    $thgHostingClient->createSSLCertificate&#40;)
+
+[//]: # (        string $domain, //FQDN for which the SSL is being requested for)
+
+[//]: # (        string $csr     //CSR generated for the request)
+
+[//]: # (    &#41;;)
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # (## Apply an SSL Certificate)
+
+[//]: # (*This method serves two purposes; it validates the CSR and other needed fields, as well as returns possible domain control validation &#40;DCV&#41; email addresses, which are needed to validate domain ownership. These emails are returned in the 'text' array of successful calls*)
+
+[//]: # ()
+[//]: # (```php)
+
+[//]: # (    $thgHostingClient->applySSLCertificate&#40;)
+
+[//]: # (        string $domain,         //FQDN for which the SSL is being requested for)
+
+[//]: # (        string $csr,            //CSR generated for the request)
+
+[//]: # (        string $email,          //Verification email address provided by createSSLCertificate&#40;&#41;)
+
+[//]: # (        int $serverSoftware     //Type of server)
+
+[//]: # (                                //2 - Apache)
+
+[//]: # (                                //10 - Java-based servers)
+
+[//]: # (                                //14 - Microsoft IIS 5.x to 6.x)
+
+[//]: # (                                //35 - Microsoft IIS 7.x and later)
+
+[//]: # (                                //36 - nginx)
+
+[//]: # (                                //18 - Oracle)
+
+[//]: # (                                //30 - Plesk)
+
+[//]: # (                                //31 - WHM/cPanel)
+
+[//]: # (                                //-1 - OTHER)
+
+[//]: # (    &#41;;)
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # (## Download an SSL Certificate)
+
+[//]: # (*Downloads an SSL Certificate*)
+
+[//]: # ()
+[//]: # (```php)
+
+[//]: # (    $thgHostingClient->downloadSSLCertificate&#40;)
+
+[//]: # (        int $certificateId  //ID of the SSL certificate)
+
+[//]: # (    &#41;;)
+
+[//]: # (```)
 
 ## Submit Order for Processing
 *Submit order for processing.*
