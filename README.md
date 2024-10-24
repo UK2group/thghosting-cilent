@@ -411,30 +411,20 @@ composer require thg/thg-client
     );
 ```
 
-## Get IPMI details for server
-*Get IPMI details for server.*
+## Create Remote Access via SoL
+*Create Remote Access via SoL. You wil get a link to be opened on your browser.*
 
 ```php
-    $thgHostingClient-getServerIPMIDetails(
+    $thgHostingClient->createServerRemoteAccessSol(
         int $serverId // ID of the Server (see “Get Servers”)
     );
 ```
 
-
-## Create VPN user to access IPMI interface
-*Create VPN user to access IPMI interface.*
-
-```php
-    $thgHostingClient-createServerIPMICredentials(
-        int $serverId // ID of the Server (see “Get Servers”)
-    );
-```
-
-## Delete VPN access to IPMI interface
-*Delete VPN access to IPMI interface.*
+## Create Remote Access via iKVM
+*Create Remote Access via iKVM. You wil get a link to be opened on your browser.*
 
 ```php
-    $thgHostingClient-deleteServerIPMICredentials(
+    $thgHostingClient->createServerRemoteAccessIkvm(
         int $serverId // ID of the Server (see “Get Servers”)
     );
 ```
