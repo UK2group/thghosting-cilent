@@ -226,18 +226,16 @@ class ThgHostingClient
         int     $locationId,
         string  $label,
         string  $hostname,
-        string  $password,
-        int     $servicePlanId,
+        string  $productName,
         ?string $osComponentCode = null,
         ?bool   $backups = null,
         ?bool   $billHourly = null,
         ?int    $customTemplateId = null
     ): array {
         $params = [
-            'label'           => $label,
-            'hostname'        => $hostname,
-            'password'        => $password,
-            'service_plan_id' => $servicePlanId,
+            'label'       => $label,
+            'hostname'    => $hostname,
+            'product_name' => $productName,
         ];
 
         if (!\is_null($customTemplateId)) {
@@ -246,12 +244,12 @@ class ThgHostingClient
             $params['os_component_code'] = $osComponentCode;
         }
 
-        if (!\is_null($billHourly)) {
-            $params['bill_hourly'] = $billHourly ? 1 : 0;
+        if (isset($billHourly)) {
+            $params['bill_hourly'] = $billHourly;
         }
 
-        if (!\is_null($backups)) {
-            $params['backups'] = $backups ? 1 : 0;
+        if (isset($backups)) {
+            $params['backups'] = $backups;
         }
 
         return $this->request(
@@ -1179,5 +1177,61 @@ class ThgHostingClient
             $params['direction'] = $direction;
         }
        return $this->request(ThgHostingClient::GET, "server-orders/inventory", $params);
+    }
+
+    /**
+     * @param string      $skuProductName
+     * @param int         $quantity
+     * @param string      $locationCode
+     * @param string      $operatingSystemProductCode
+     * @param string|null $licenseProductCode
+     * @param int|null    $additionalBandwidthTb
+     * @param string|null $supportLevelProductCode
+     * @return array
+     * @throws ClientException
+     */
+    public function createBareMetalServerOrder(
+        string  $skuProductName,
+        int     $quantity,
+        string  $locationCode,
+        string  $operatingSystemProductCode,
+        ?string $licenseProductCode = null,
+        ?int    $additionalBandwidthTb = null,
+        ?string $supportLevelProductCode = null
+    ): array {
+        $params = [
+            'sku_product_name'              => $skuProductName,
+            'quantity'                      => $quantity,
+            'location_code'                 => $locationCode,
+            'operating_system_product_code' => $operatingSystemProductCode,
+        ];
+
+        if (!is_null($licenseProductCode)) {
+            $params['license_product_code'] = $licenseProductCode;
+        }
+
+        if (!is_null($additionalBandwidthTb)) {
+            $params['additional_bandwidth_tb'] = $additionalBandwidthTb;
+        }
+
+        if (!is_null($supportLevelProductCode)) {
+            $params['support_level_product_code'] = $supportLevelProductCode;
+        }
+        return $this->request(ThgHostingClient::POST, "server-orders/order", $params);
+    }
+
+    /**
+     * @param string $skuProductName
+     * @param string $locationCode
+     * @return array
+     * @throws ClientException
+     */
+    public function listAvailableBareMetalAddons(string $skuProductName, string $locationCode): array
+    {
+        $params = [
+            'sku_product_name' => $skuProductName,
+            'location_code'    => $locationCode,
+        ];
+        return $this->request(ThgHostingClient::GET, "server-orders/list-addons", $params);
     }
 }

@@ -183,7 +183,6 @@ final class ThgHostingClientTest extends TestCase
             'Test-VM',
             'test.example.com',
             'mySecretPassword',
-            2698,
             'SSDVPSDEBIAN9',
             true,
             true

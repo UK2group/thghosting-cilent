@@ -66,11 +66,10 @@ composer require thg/thg-client
         int     $locationId,              // ID of the SSD VPS Location (see “Get SSD VPS Locations”)
         string  $label,                   // Label for the new SSD VPS Server
         string  $hostname,                // Hostname for the new SSD VPS Server
-        string  $password,                // Password for the new SSD VPS Server
-        int     $servicePlanId,           // ID of the chosen SSD VPS plan (see “Get SSD VPS Plans”)
+        string  $productName,             // name of the chosen SSD VPS plan (see “Get SSD VPS Plans”)
         ?string $osComponentCode  = null, // Optional; Component code of the SSD VPS operating system (see “Get SSD VPS Operating Systems”) (you have to pass either os_component_code or custom_template_id)
-        ?bool   $backups          = null, // Optional; If passed, server will be created with Backup Protection
-        ?bool   $billHourly       = null, // Optional; If passed billing will be set hourly, otherwise monthly billing will be used
+        ?bool   $backups          = null, // Optional; If set to true, server will be created with Backup Protection
+        ?bool   $billHourly       = null, // Optional; If set to true, billing will be set hourly, otherwise monthly billing will be used
         ?int    $customTemplateId = null  // Optional; Pass here the Template ID of Custom OS (see “Get Custom OSes for SSD VPS”) (you have to pass either os_component_code or custom_template_id)
     );
 ```
@@ -761,5 +760,27 @@ composer require thg/thg-client
         ?bool $raidEnabled = null,
         ?string $sortBy = null,
         ?string $direction = null
+    );
+```
+
+# Create new bare metal server order
+*Creates new bare metal server order*
+```php
+    $thgHostingClient->createBareMetalServerOrder(
+        string $skuProductName,
+        int $quantity,
+        string $locationCode,
+        string $operatingSystemProductCode,     //Find available OS product codes by calling the list addons endpoint
+        ?string $licenseProductCode = null,     //Find available license product codes by calling the list addons endpoint
+        ?int $additionalBandwidthTb = null, 
+        ?string $supportLevelProductCode = null //Find available managed support product codes by calling the list addons endpoint
+    );
+```
+# List Available addons for bare metal server order
+*Returns list of all available addons for a bare metal server*
+```php
+    $thgHostingClient->listAvailableBareMetalAddons(
+        string $skuProductName, 
+        string $locationCode
     );
 ```
