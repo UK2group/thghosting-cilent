@@ -941,60 +941,6 @@ class ThgHostingClient
     }
 
     /**
-     * @throws ClientException
-     */
-    public function getSSLCertificates(?int $offset, ?int $limit, bool $collected = false): array
-    {
-        $params = [];
-        if (!is_null($offset)) {
-            $params['offset'] = $offset;
-        }
-        if (!is_null($limit)) {
-            $params['limit'] = $limit;
-        }
-        if ($collected) {
-            $params['collected'] = 'true';
-        }
-        return $this->request(self::GET, 'ssl', $params);
-    }
-
-    /**
-     * @throws ClientException
-     */
-    public function createSSLCertificate(string $domain, string $csr): array
-    {
-        $params = [];
-
-        $params['domain'] = $domain;
-        $params['csr']    = $csr;
-
-        return $this->request(self::POST, 'ssl', $params);
-    }
-
-    /**
-     * @throws ClientException
-     */
-    public function applySSLCertificate(string $domain, string $csr, string $email, int $serverSoftware): array
-    {
-        $params = [];
-
-        $params['domain']         = $domain;
-        $params['csr']            = $csr;
-        $params['email']          = $email;
-        $params['serverSoftware'] = $serverSoftware;
-
-        return $this->request(self::POST, 'ssl/apply', $params);
-    }
-
-    /**
-     * @throws ClientException
-     */
-    public function downloadSSLCertificate(int $certificateId): array
-    {
-        return $this->request(self::GET, 'ssl/' . $certificateId . '/download');
-    }
-
-    /**
      * Retrieves a list of MS licenses
      *
      * @param int $serviceId
