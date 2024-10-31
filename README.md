@@ -504,72 +504,6 @@ composer require thg/thg-client
     $thgHostingClient->getStatusUpdates();
 ```
 
-## Get Datacenters
-*Returns all datacenters.*
-
-```php
-    $thgHostingClient->getDatacenters();
-```
-
-## Get Product Categories
-*Returns product categories.*
-
-```php
-    $thgHostingClient->getProductCategory();
-```
-
-## Get Products
-*Returns all products in category and location.*
-
-```php
-    $thgHostingClient->getProductsInCategory(
-        int $locationId, // ID of the location (see “Get All Locations”)
-        int $categoryId  // ID of the category (see “Get All Categories”)
-    );
-```
-
-## Get Product Details
-*Returns Product Details.*
-
-```php
-    $thgHostingClient->getProductDetails(
-        int $locationId, // ID of the location (see “Get All Locations”)
-        int $categoryId  // ID of the category (see “Get All Categories”)
-        int $productId   // ID of the product (see “Get Products”)
-    );
-```
-
-## Get Calculated Price with Tax
-*Returns calculated price with tax for order.*
-
-```php
-    $body = [
-        [
-            "product_id"    => 265,
-            "quantity"      => 1,
-            "price"         => 354.9,
-            "datacenter_id" => 12,
-            "duration_id"   => 2,
-            "addons"        => [
-                [
-                    "addon_id"        => 4,
-                    "selected_option" => 2,
-                    "price"           => 10
-                ]
-            ]
-        ]
-    ];
-    $thgHostingClient->getCalculatedPriceWithTax(
-        array $body
-    );
-```
-
-## Get Payment Methods
-*Returns payment methods.*
-
-```php
-    $thgHostingClient->getPaymentMethods();
-```
 
 ## Get Billing Services
 *Returns customer services.*
@@ -591,42 +525,6 @@ composer require thg/thg-client
     $thgHostingClient->getBillingInvoices(
         ?int $offset,       //If set, returns records starting from this offset
         ?int $limit         //If set, limits the number of records
-    );
-```
-
-## Submit Order for Processing
-*Submit order for processing.*
-
-```php
-    $body = [
-        "order" => [
-            [
-                "category_id" => 2,
-                "product_id" => 265,
-                "quantity" => 1,
-                "price" => 354.9,
-                "datacenter_id" => 12,
-                "duration_id" => 2,
-                "addons" => [],
-                "sales_tax" => 0
-            ]
-        ],
-        "paymentMethodId" => 21,
-        "contact_data" => [
-        	"address" => "816 Address",
-        	"city"  => "city",
-        	"company" => "Company",
-        	"country" => "US",
-        	"county" => "County 1",
-        	"email" => "mail@mail.com",
-        	"first_name" => "John",
-        	"last_name" => "Doe",
-        	"phone" => "+44 11 2222 3333",
-        	"postcode" => "12345"
-        ]
-    ];
-    $thgHostingClient->submitOrderForProcessing(
-        array $body
     );
 ```
 
