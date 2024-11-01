@@ -813,7 +813,7 @@ class ThgHostingClient
      */
     public function getServerSshKeys(string $serverId): array
     {
-        return $this->request(self::PUT, "servers/$serverId/ssh-keys");
+        return $this->request(self::GET, "servers/$serverId/ssh-keys");
     }
 
     /**
