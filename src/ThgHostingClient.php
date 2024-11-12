@@ -680,61 +680,6 @@ class ThgHostingClient
         return $this->request(self::GET, 'status-updates');
     }
 
-    /**
-     * @throws ClientException
-     */
-    public function getDatacenters(): array
-    {
-        return $this->request(self::GET, 'orders/locations');
-    }
-
-    /**
-     * @throws ClientException
-     */
-    public function getProductCategory(): array
-    {
-        return $this->request(self::GET, 'orders/categories');
-    }
-
-    /**
-     * @throws ClientException
-     */
-    public function getProductsInCategory(int $locationId, int $categoryId): array
-    {
-        return $this->request(self::GET, "orders/locations/$locationId/categories/$categoryId/products");
-    }
-
-    /**
-     * @throws ClientException
-     */
-    public function getProductDetails(int $locationId, int $categoryId, int $productId): array
-    {
-        return $this->request(self::GET, "orders/locations/$locationId/categories/$categoryId/products/$productId");
-    }
-
-    /**
-     * @throws ClientException
-     */
-    public function getCalculatedPriceWithTax(array $body): array
-    {
-        return $this->request(self::POST, 'orders/tax', $body);
-    }
-
-    /**
-     * @throws ClientException
-     */
-    public function getPaymentMethods(): array
-    {
-        return $this->request(self::GET, 'orders/payment-methods');
-    }
-
-    /**
-     * @throws ClientException
-     */
-    public function submitOrderForProcessing(array $body): array
-    {
-        return $this->request(self::POST, 'orders', $body);
-    }
 
     /**
      * @throws ClientException
