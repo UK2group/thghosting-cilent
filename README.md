@@ -380,6 +380,35 @@ composer require thg/thg-client
     );
 ```
 
+## get SSH keys assigned to a server
+*Get list of SSH keys currently assigned to given server.*
+
+```php
+    $thgHostingClient->getServerSshKeys(
+        string $serverId // ID of the Server (see “Get Servers”)
+    );
+```
+
+## assign SSH key(s) to servers
+*Assign one or more SSH keys to given server.*
+
+```php
+    $thgHostingClient->assignServerSshKeys(
+        string $serverId, // ID of the Server (see “Get Servers”)
+        array $sshKeyIds  // array of SSH key ids to be assigned to the server
+    );
+```
+
+## un-assign SSH key(s) to servers
+*Un-assign one or more SSH keys from given server.*
+
+```php
+    $thgHostingClient->unAssignServerSshKeys(
+        string $serverId, // ID of the Server (see “Get Servers”)
+        array $sshKeyIds  // array of SSH key ids to be un-assigned to the server
+    );
+```
+
 ## Get Server Bandwidth Graph
 *Get a graphical representation of the bandwidth usage for a specific server over the given period.*
 

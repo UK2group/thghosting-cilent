@@ -756,6 +756,30 @@ class ThgHostingClient
     /**
      * @throws ClientException
      */
+    public function getServerSshKeys(string $serverId): array
+    {
+        return $this->request(self::GET, "servers/$serverId/ssh-keys");
+    }
+
+    /**
+     * @throws ClientException
+     */
+    public function assignServerSshKeys(string $serverId, array $sshKeyIds): array
+    {
+        return $this->request(self::PATCH, "servers/$serverId/ssh-keys/assign", ["ssh_key_ids" => $sshKeyIds]);
+    }
+
+    /**
+     * @throws ClientException
+     */
+    public function unAssignServerSshKeys(string $serverId, array $sshKeyIds): array
+    {
+        return $this->request(self::PATCH, "servers/$serverId/ssh-keys/un-assign", ["ssh_key_ids" => $sshKeyIds]);
+    }
+
+    /**
+     * @throws ClientException
+     */
     public function getBillingServices(
         ?bool   $showAddOns,
         ?string $sortBy,
