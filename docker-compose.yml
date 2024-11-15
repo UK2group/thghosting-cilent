@@ -14,3 +14,10 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
+
+# Create a new net work in case of IP overlapping issue
+# docker network create thg-panorama --subnet 172.24.24.0/24
+networks:
+  default:
+    external:
+      name: thg-panorama
