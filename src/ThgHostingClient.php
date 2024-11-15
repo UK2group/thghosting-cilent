@@ -680,61 +680,6 @@ class ThgHostingClient
         return $this->request(self::GET, 'status-updates');
     }
 
-    /**
-     * @throws ClientException
-     */
-    public function getDatacenters(): array
-    {
-        return $this->request(self::GET, 'orders/locations');
-    }
-
-    /**
-     * @throws ClientException
-     */
-    public function getProductCategory(): array
-    {
-        return $this->request(self::GET, 'orders/categories');
-    }
-
-    /**
-     * @throws ClientException
-     */
-    public function getProductsInCategory(int $locationId, int $categoryId): array
-    {
-        return $this->request(self::GET, "orders/locations/$locationId/categories/$categoryId/products");
-    }
-
-    /**
-     * @throws ClientException
-     */
-    public function getProductDetails(int $locationId, int $categoryId, int $productId): array
-    {
-        return $this->request(self::GET, "orders/locations/$locationId/categories/$categoryId/products/$productId");
-    }
-
-    /**
-     * @throws ClientException
-     */
-    public function getCalculatedPriceWithTax(array $body): array
-    {
-        return $this->request(self::POST, 'orders/tax', $body);
-    }
-
-    /**
-     * @throws ClientException
-     */
-    public function getPaymentMethods(): array
-    {
-        return $this->request(self::GET, 'orders/payment-methods');
-    }
-
-    /**
-     * @throws ClientException
-     */
-    public function submitOrderForProcessing(array $body): array
-    {
-        return $this->request(self::POST, 'orders', $body);
-    }
 
     /**
      * @throws ClientException
@@ -798,6 +743,30 @@ class ThgHostingClient
     public function setRDNSentryForIpAddress(string $serverId, string $ipAddress, array $body): array
     {
         return $this->request(self::PUT, "servers/$serverId/ip-addresses/$ipAddress/rdns", $body);
+    }
+
+    /**
+     * @throws ClientException
+     */
+    public function getServerSshKeys(string $serverId): array
+    {
+        return $this->request(self::GET, "servers/$serverId/ssh-keys");
+    }
+
+    /**
+     * @throws ClientException
+     */
+    public function assignServerSshKeys(string $serverId, array $sshKeyIds): array
+    {
+        return $this->request(self::PATCH, "servers/$serverId/ssh-keys/assign", ["ssh_key_ids" => $sshKeyIds]);
+    }
+
+    /**
+     * @throws ClientException
+     */
+    public function unAssignServerSshKeys(string $serverId, array $sshKeyIds): array
+    {
+        return $this->request(self::PATCH, "servers/$serverId/ssh-keys/un-assign", ["ssh_key_ids" => $sshKeyIds]);
     }
 
     /**
