@@ -1,2 +1,11 @@
 /test/keys/
 /vendor
+.idea/
+
+# examples
+/examples/composer.lock
+/examples/vendor/
+/examples/.env
+
+# Tests
+.phpunit.result.cache

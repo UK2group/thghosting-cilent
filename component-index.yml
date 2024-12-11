@@ -1,0 +1,9 @@
+classification:
+  env: production
+  data: public
+  type: service
+ownership:
+  team: THG Control Panel
+staticanalysis:
+  instance: sonarqube-storm.l3pjg.icekube.ics.cloud
+  key: thghosting-cilent

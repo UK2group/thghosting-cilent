@@ -2,6 +2,7 @@
     "name": "thg/thg-client",
     "description": "THG Open API client",
     "type": "library",
+    "version": "1.4.2",
     "license": "GPL-2.0-only",
     "autoload": {
         "psr-4": {
@@ -9,7 +10,17 @@
         }
     },
     "require": {
-        "php": ">=7.2.34",
-        "ext-curl": "*"
+        "php": "^7.2 || ^8.0",
+        "ext-curl": "*",
+        "ext-fileinfo": "*",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "scripts": {
+        "unit-tests": [
+            "php ./vendor/phpunit/phpunit/phpunit --verbose"
+        ]
     }
 }

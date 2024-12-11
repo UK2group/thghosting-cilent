@@ -66,11 +66,10 @@ composer require thg/thg-client
         int     $locationId,              // ID of the SSD VPS Location (see “Get SSD VPS Locations”)
         string  $label,                   // Label for the new SSD VPS Server
         string  $hostname,                // Hostname for the new SSD VPS Server
-        string  $password,                // Password for the new SSD VPS Server
-        int     $servicePlanId,           // ID of the chosen SSD VPS plan (see “Get SSD VPS Plans”)
+        string  $productName,             // name of the chosen SSD VPS plan (see “Get SSD VPS Plans”)
         ?string $osComponentCode  = null, // Optional; Component code of the SSD VPS operating system (see “Get SSD VPS Operating Systems”) (you have to pass either os_component_code or custom_template_id)
-        ?bool   $backups          = null, // Optional; If passed, server will be created with Backup Protection
-        ?bool   $billHourly       = null, // Optional; If passed billing will be set hourly, otherwise monthly billing will be used
+        ?bool   $backups          = null, // Optional; If set to true, server will be created with Backup Protection
+        ?bool   $billHourly       = null, // Optional; If set to true, billing will be set hourly, otherwise monthly billing will be used
         ?int    $customTemplateId = null  // Optional; Pass here the Template ID of Custom OS (see “Get Custom OSes for SSD VPS”) (you have to pass either os_component_code or custom_template_id)
     );
 ```
@@ -381,6 +380,35 @@ composer require thg/thg-client
     );
 ```
 
+## get SSH keys assigned to a server
+*Get list of SSH keys currently assigned to given server.*
+
+```php
+    $thgHostingClient->getServerSshKeys(
+        string $serverId // ID of the Server (see “Get Servers”)
+    );
+```
+
+## assign SSH key(s) to servers
+*Assign one or more SSH keys to given server.*
+
+```php
+    $thgHostingClient->assignServerSshKeys(
+        string $serverId, // ID of the Server (see “Get Servers”)
+        array $sshKeyIds  // array of SSH key ids to be assigned to the server
+    );
+```
+
+## un-assign SSH key(s) to servers
+*Un-assign one or more SSH keys from given server.*
+
+```php
+    $thgHostingClient->unAssignServerSshKeys(
+        string $serverId, // ID of the Server (see “Get Servers”)
+        array $sshKeyIds  // array of SSH key ids to be un-assigned to the server
+    );
+```
+
 ## Get Server Bandwidth Graph
 *Get a graphical representation of the bandwidth usage for a specific server over the given period.*
 
@@ -389,6 +417,26 @@ composer require thg/thg-client
         int    $serverId,           // ID of the Server (see “Get Servers”)
         string $periodStart = null, // Optional. And RFC3339/ISO8601 date-time string representing the start of period of the dataset. Defaults to the start of today.
         string $periodEnd   = null  // Optional. And RFC3339/ISO8601 date-time string representing the end of period of the dataset. Defaults to one month before the start of today
+    );
+```
+
+## Get Server OS List
+*Get a list of available operating systems for provisioning a specific server.*
+
+```php
+    $thgHostingClient->getServerOsList(
+        int $serverId // ID of the Server (see “Get Servers”)
+    );
+```
+
+## Reimage Server
+*Reimage a server with a new operating system.*
+
+```php
+    $thgHostingClient->reimageServer(
+        int    $serverId,       // ID of the Server (see “Get Servers”)
+        string $osCode,         // Code of the OS to reimage the server with (see “Get Server OS List”)
+        string $reason = null   // Optional. Reason for reimage
     );
 ```
 
@@ -485,72 +533,6 @@ composer require thg/thg-client
     $thgHostingClient->getStatusUpdates();
 ```
 
-## Get Datacenters
-*Returns all datacenters.*
-
-```php
-    $thgHostingClient->getDatacenters();
-```
-
-## Get Product Categories
-*Returns product categories.*
-
-```php
-    $thgHostingClient->getProductCategory();
-```
-
-## Get Products
-*Returns all products in category and location.*
-
-```php
-    $thgHostingClient->getProductsInCategory(
-        int $locationId, // ID of the location (see “Get All Locations”)
-        int $categoryId  // ID of the category (see “Get All Categories”)
-    );
-```
-
-## Get Product Details
-*Returns Product Details.*
-
-```php
-    $thgHostingClient->getProductDetails(
-        int $locationId, // ID of the location (see “Get All Locations”)
-        int $categoryId  // ID of the category (see “Get All Categories”)
-        int $productId   // ID of the product (see “Get Products”)
-    );
-```
-
-## Get Calculated Price with Tax
-*Returns calculated price with tax for order.*
-
-```php
-    $body = [
-        [
-            "product_id"    => 265,
-            "quantity"      => 1,
-            "price"         => 354.9,
-            "datacenter_id" => 12,
-            "duration_id"   => 2,
-            "addons"        => [
-                [
-                    "addon_id"        => 4,
-                    "selected_option" => 2,
-                    "price"           => 10
-                ]
-            ]
-        ]
-    ];
-    $thgHostingClient->getCalculatedPriceWithTax(
-        array $body
-    );
-```
-
-## Get Payment Methods
-*Returns payment methods.*
-
-```php
-    $thgHostingClient->getPaymentMethods();
-```
 
 ## Get Billing Services
 *Returns customer services.*
@@ -572,92 +554,6 @@ composer require thg/thg-client
     $thgHostingClient->getBillingInvoices(
         ?int $offset,       //If set, returns records starting from this offset
         ?int $limit         //If set, limits the number of records
-    );
-```
-## Get SSL Certificates
-*Returns SSL Certificates*
-
-```php
-    $thgHostingClient->getSSLCertificates(
-        ?int $offset,                     //If set, returns records starting from this offset
-        ?int $limit                       //If set, limits the number of records
-        bool $collected = false           //If true, returns only collected certificates
-    );
-```
-
-## Create an SSL Certificate
-*This method serves two purposes; it validates the CSR and other needed fields, as well as returns possible domain control validation (DCV) email addresses, which are needed to validate domain ownership. These emails are returned in the 'text' array of successful calls*
-
-```php
-    $thgHostingClient->createSSLCertificate(
-        string $domain, //FQDN for which the SSL is being requested for
-        string $csr     //CSR generated for the request
-    );
-```
-
-## Apply an SSL Certificate
-*This method serves two purposes; it validates the CSR and other needed fields, as well as returns possible domain control validation (DCV) email addresses, which are needed to validate domain ownership. These emails are returned in the 'text' array of successful calls*
-
-```php
-    $thgHostingClient->applySSLCertificate(
-        string $domain,         //FQDN for which the SSL is being requested for
-        string $csr,            //CSR generated for the request
-        string $email,          //Verification email address provided by createSSLCertificate()
-        int $serverSoftware     //Type of server
-                                //2 - Apache
-                                //10 - Java-based servers
-                                //14 - Microsoft IIS 5.x to 6.x
-                                //35 - Microsoft IIS 7.x and later
-                                //36 - nginx
-                                //18 - Oracle
-                                //30 - Plesk
-                                //31 - WHM/cPanel
-                                //-1 - OTHER
-    );
-```
-
-## Download an SSL Certificate
-*Downloads an SSL Certificate*
-
-```php
-    $thgHostingClient->downloadSSLCertificate(
-        int $certificateId  //ID of the SSL certificate
-    );
-```
-
-## Submit Order for Processing
-*Submit order for processing.*
-
-```php
-    $body = [
-        "order" => [
-            [
-                "category_id" => 2,
-                "product_id" => 265,
-                "quantity" => 1,
-                "price" => 354.9,
-                "datacenter_id" => 12,
-                "duration_id" => 2,
-                "addons" => [],
-                "sales_tax" => 0
-            ]
-        ],
-        "paymentMethodId" => 21,
-        "contact_data" => [
-        	"address" => "816 Address",
-        	"city"  => "city",
-        	"company" => "Company",
-        	"country" => "US",
-        	"county" => "County 1",
-        	"email" => "mail@mail.com",
-        	"first_name" => "John",
-        	"last_name" => "Doe",
-        	"phone" => "+44 11 2222 3333",
-        	"postcode" => "12345"
-        ]
-    ];
-    $thgHostingClient->submitOrderForProcessing(
-        array $body
     );
 ```
 
@@ -694,5 +590,125 @@ composer require thg/thg-client
         string $details = '',   // Reason explaining the need for upgrade (Required for IP Request)
         int    $quantity = 1    // The amount of Upgrades (Ignore when sending requuest for more IPs)
         ?array $ipCount = null  // Required only when sending request for new IP. Describes the amount and type of needed IPs.
+    );
+```
+
+## Get Microsoft Licenses
+*Returns Microsoft Licenses*
+```php
+    $thgHostingClient->getMicrosoftLicenses(
+        int $serviceId,      // Server service ID to get a list of licenses
+    );
+```
+## Get Microsoft License Details
+*Returns Microsoft License Details*
+```php
+    $thgHostingClient->getMicrosoftLicenseDetails(
+        int $serviceId,      // Server service ID for retrieving of an MS license details which belongs to
+        int $licenseId,      // License ID to get an MS license details
+    );
+```
+## Delete Microsoft License
+*Deletes a Microsoft License*
+```php
+    $thgHostingClient->deleteMicrosoftLicense(
+        int $serviceId,      // Server service ID for deleting of an MS license which belongs to
+        int $licenseId,      // License ID to delete
+    );
+```
+## Get Available Microsoft License Products
+*Returns A List Of Microsoft License Products*
+```php
+    $thgHostingClient->getMicrosoftLicenseProducts(
+        int $serviceId,      // Server service ID to get a list of license products
+    );
+```
+
+## List SSH keys Data
+*Returns A List Of SSH Keys*
+```php
+    $thgHostingClient->listSshKeys();
+```
+
+## Add An SSH Key
+*Creates New SSH Key Record*
+```php
+    $thgHostingClient->createSshKey(
+        string $key,        // Public RSA Key to be stored
+        string $label,      // Label for SSH Key
+    );
+```
+
+## Update Label For An Existing SSH Key
+*Updates Label For SSH Key Given Id*
+```php
+    $thgHostingClient->updateSshKeyLabel(
+        int $sshId,         // The ID for the SSH Key to be updated
+        string $label,      // The new label for the SSH Key
+    );
+```
+
+## Delete An SSH Key
+*Delete An SSH Key Of The Given Id*
+```php
+    $thgHostingClient->deleteSshKey(
+        int $sshId,         // The ID of the SSH Key to be deleted
+    );
+    );
+```
+
+## Get An SSH Key With Id
+*Returns An SSH Key Given Id*
+```php
+    $thgHostingClient->getSshKeyById(
+        int $sshId,      // The ID of the SSH Key to be fetched
+    );
+```
+
+## Get list of server inventory
+*Returns server inventory list*
+```php
+    $thgHostingClient->getServerInventory(
+        ?int $datacenterId = null,
+        ?string $cpuBrand = null,
+        ?int $minCpuCores = null,
+        ?int $maxCpuCores = null,
+        ?float $minCpuSpeed = null,
+        ?float $maxCpuSpeed = null,
+        ?int $minRam = null,
+        ?int $maxRam = null,
+        ?string $storageType = null,
+        ?int $minStorage = null,
+        ?int $maxStorage = null,
+        ?int $minNic = null,
+        ?int $maxNic = null,
+        ?float $minPrice = null,
+        ?float $maxPrice = null,
+        ?bool $raidEnabled = null,
+        ?string $sortBy = null,
+        ?string $direction = null
+    );
+```
+
+# Create new bare metal server order
+*Creates new bare metal server order*
+```php
+    $thgHostingClient->createBareMetalServerOrder(
+        string $skuProductName,
+        int $quantity,
+        string $locationCode,
+        string $operatingSystemProductCode,     //Find available OS product codes by calling the list addons endpoint
+        ?string $licenseProductCode = null,     //Find available license product codes by calling the list addons endpoint
+        ?int $additionalBandwidthTb = null, 
+        ?string $supportLevelProductCode = null //Find available managed support product codes by calling the list addons endpoint
+        ?array $sshKeyIds = null                //Add ssh keys to the server.
+    );
+```
+# List Available addons for bare metal server order
+*Returns list of all available addons for a bare metal server*
+```php
+    $thgHostingClient->listAvailableBareMetalAddons(
+        string $skuProductName, 
+        string $locationCode
     );
 ```
