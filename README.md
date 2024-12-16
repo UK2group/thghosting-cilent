@@ -217,6 +217,28 @@ composer require thg/thg-client
     );
 ```
 
+## Create Backups
+*Create SSD VPS Backups*
+
+```php
+    $thgHostingClient->createBackup(
+        int $locationId // ID of the SSD VPS Location (see “Get SSD VPS Locations”)
+        int $serverId,  // ID of the SSD VPS Server
+    );
+```
+
+## Create IP Request
+*Request a new IP address.*
+
+```php
+    $thgHostingClient->ssdVpsIpRequest(
+        int $locationId // ID of the SSD VPS Location (see “Get SSD VPS Locations”)
+        int $serverId,  // ID of the SSD VPS Server
+        string $reason, // Detailed explanation of why the IP is needed 
+        array $ipCount  // Number of IP addresses to request in at least one of the following categories [terminal, vpn, mailing, application, voice, sqldb, ssl_cert, media, other]
+    );
+```
+
 ## Get Service Details
 *Get details for a service with net price in USD.*
 
@@ -419,6 +441,16 @@ composer require thg/thg-client
         string $periodEnd   = null  // Optional. And RFC3339/ISO8601 date-time string representing the end of period of the dataset. Defaults to one month before the start of today
     );
 ```
+## Create IP Request
+*Request a new IP address*
+
+```php
+    $thgHostingClient->bareMetalIpRequest(
+        int $serverId,  // ID of the Bare Metal Server
+        string $reason, // Detailed explanation of why the IP is needed 
+        array $ipCount  // Number of IP addresses to request in at least one of the following categories [terminal, vpn, mailing, application, voice, sqldb, ssl_cert, media, other]
+    );
+```
 
 ## Get Server OS List
 *Get a list of available operating systems for provisioning a specific server.*
@@ -465,6 +497,15 @@ composer require thg/thg-client
 ```php
     $thgHostingClient-deleteServerIPMICredentials(
         int $serverId // ID of the Server (see “Get Servers”)
+    );
+```
+## Add Backup to Bare Metal Servers
+*Add Bandwidth*
+
+```php
+    $thgHostingClient->addBandwidth(
+        int $locationId //Bandwidth location ID
+        int $quantity  // Quantity of bandwidth to add (in TB)
     );
 ```
 
@@ -554,42 +595,6 @@ composer require thg/thg-client
     $thgHostingClient->getBillingInvoices(
         ?int $offset,       //If set, returns records starting from this offset
         ?int $limit         //If set, limits the number of records
-    );
-```
-
-## Get Service Upgrades
-*Returns a list of available upgrades for chosen service.*
-
-```php
-    $thgHostingClient->getBillingServiceUpgrades(
-        int $service_id  // ID of the Service (see “Get Services”)
-    );
-```
-
-## Upgrade Service
-*Upgrades service.*
-
-```php
-    // Example of IP Count with all possible options, you can send only those that have value over 0
-    $ipCount = [
-        "vpn"         => 0,
-        "sqldb"       => 0,
-        "ssl_cert"    => 0,
-        "terminal"    => 0,
-        "application" => 0,
-        "voice"       => 0,
-        "media"       => 0,
-        "mailing"     => 0,
-        "other"       => 0,
-    ];
-
-    $thgHostingClient->upgradesService(
-        int    $serviceId,      // To which server add chosen Upgrade (see “Get Services”)
-        string $addonCode,      // Upgrade category code (see “Get Upgrades”)
-        string $optionCode,     // Upgrade Code (see “Get Upgrades”)
-        string $details = '',   // Reason explaining the need for upgrade (Required for IP Request)
-        int    $quantity = 1    // The amount of Upgrades (Ignore when sending requuest for more IPs)
-        ?array $ipCount = null  // Required only when sending request for new IP. Describes the amount and type of needed IPs.
     );
 ```
 

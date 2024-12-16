@@ -397,6 +397,30 @@ class ThgHostingClient
     /**
      * @throws ClientException
      */
+    public function createBackup(int $locationId, int $serverId): array
+    {
+        return $this->request(self::POST, "ssd-vps/locations/$locationId/servers/$serverId/backups");
+    }
+
+    /**
+     * @throws ClientException
+     */
+    public function ssdVpsIpRequest(int $locationId, int $serverId, string $reason, array $ipCount): array
+    {
+        $body = [
+            'reason'  => $reason,
+            'ip_count' => $ipCount,
+        ];
+        return $this->request(
+            self::POST,
+            "ssd-vps/locations/$locationId/servers/$serverId/ip-request",
+            $body
+        );
+    }
+
+    /**
+     * @throws ClientException
+     */
     public function getServiceDetails(int $serviceId): array
     {
         return $this->request(self::GET, "billing/services/$serviceId");
@@ -560,6 +584,22 @@ class ThgHostingClient
     /**
      * @throws ClientException
      */
+    public function bareMetalIpRequest(int $serverId, string $reason, array $ipCount): array
+    {
+        $body = [
+            'reason'  => $reason,
+            'ip_count' => $ipCount,
+        ];
+        return $this->request(
+            self::POST,
+            "servers/$serverId/ip-request",
+            $body
+        );
+    }
+
+    /**
+     * @throws ClientException
+     */
     public function getServerBandwidthGraph(int $serverId, string $periodStart = null, string $periodEnd = null): array
     {
         $params = [];
@@ -708,6 +748,14 @@ class ThgHostingClient
     /**
      * @throws ClientException
      */
+    public function addBandwidth(int $locationId, int $quantity): array
+    {
+        return $this->request(self::POST, "bandwidth/$locationId?quantity=$quantity");
+    }
+
+    /**
+     * @throws ClientException
+     */
     public function getServerPowerStatus(string $serverId): array
     {
         return $this->request(self::GET, "servers/$serverId/power/status");
@@ -828,40 +876,6 @@ class ThgHostingClient
         }
 
         return $this->request(self::GET, 'billing/invoices', $params);
-    }
-
-    /**
-     * @throws ClientException
-     */
-    public function getBillingServiceUpgrades(int $serviceId): array
-    {
-        return $this->request(self::GET, "billing/services/$serviceId/upgrades");
-    }
-
-    /**
-     * @throws ClientException
-     */
-    public function upgradesService(
-        int    $serviceId,
-        string $addonCode,
-        string $optionCode,
-        string $details = '',
-        int    $quantity = 1,
-        ?array $ipCount = null
-    ): array {
-        $params = [
-            'service'     => $serviceId,
-            'addon_code'  => $addonCode,
-            'option_code' => $optionCode,
-            'details'     => $details,
-            'quantity'    => $quantity,
-        ];
-
-        if (!\is_null($ipCount)) {
-            $params['ip_count'] = $ipCount;
-        }
-
-        return $this->request(self::POST, 'billing/services/upgrade/', $params);
     }
 
     /**
