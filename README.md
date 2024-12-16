@@ -446,7 +446,7 @@ composer require thg/thg-client
 
 ```php
     $thgHostingClient->bareMetalIpRequest(
-        int $serverId,  // ID of the SSD VPS Server
+        int $serverId,  // ID of the Bare Metal Server
         string $reason, // Detailed explanation of why the IP is needed 
         array $ipCount  // Number of IP addresses to request in at least one of the following categories [terminal, vpn, mailing, application, voice, sqldb, ssl_cert, media, other]
     );
