@@ -697,10 +697,11 @@ composer require thg/thg-client
         string $skuProductName,
         int $quantity,
         string $locationCode,
-        string $operatingSystemProductCode,     //Find available OS product codes by calling the list addons endpoint
-        ?string $licenseProductCode = null,     //Find available license product codes by calling the list addons endpoint
+        string $operatingSystemProductCode,      //Find available OS product codes by calling the list addons endpoint
+        ?string $licenseProductCode = null,      //Find available license product codes by calling the list addons endpoint
         ?int $additionalBandwidthTb = null, 
-        ?string $supportLevelProductCode = null //Find available managed support product codes by calling the list addons endpoint
+        ?string $supportLevelProductCode = null, //Find available managed support product codes by calling the list addons endpoint
+        ?array $sshKeyIds = null                 //Add ssh keys to the server.
     );
 ```
 # List Available addons for bare metal server order

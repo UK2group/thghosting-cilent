@@ -1156,6 +1156,7 @@ class ThgHostingClient
      * @param string|null $licenseProductCode
      * @param int|null    $additionalBandwidthTb
      * @param string|null $supportLevelProductCode
+     * @param array|null  $sshKeyIds
      * @return array
      * @throws ClientException
      */
@@ -1166,7 +1167,8 @@ class ThgHostingClient
         string  $operatingSystemProductCode,
         ?string $licenseProductCode = null,
         ?int    $additionalBandwidthTb = null,
-        ?string $supportLevelProductCode = null
+        ?string $supportLevelProductCode = null,
+        ?array  $sshKeyIds = null
     ): array {
         $params = [
             'sku_product_name'              => $skuProductName,
@@ -1185,6 +1187,10 @@ class ThgHostingClient
 
         if (!is_null($supportLevelProductCode)) {
             $params['support_level_product_code'] = $supportLevelProductCode;
+        }
+
+        if (!is_null($sshKeyIds)) {
+            $params['ssh_key_ids'] = $sshKeyIds;
         }
         return $this->request(ThgHostingClient::POST, "server-orders/order", $params);
     }
