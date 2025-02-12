@@ -724,25 +724,17 @@ class ThgHostingClient
     /**
      * @throws ClientException
      */
-    public function getServerIPMIDetails(string $serverId): array
+    public function createServerRemoteAccessSol(string $serverId): array
     {
-        return $this->request(self::GET, "servers/$serverId/ipmi");
+        return $this->request(self::POST, "servers/$serverId/remote-access/sol");
     }
 
     /**
      * @throws ClientException
      */
-    public function createServerIPMICredentials(string $serverId): array
+    public function createServerRemoteAccessIkvm(string $serverId): array
     {
-        return $this->request(self::POST, "servers/$serverId/ipmi");
-    }
-
-    /**
-     * @throws ClientException
-     */
-    public function deleteServerIPMICredentials(string $serverId): array
-    {
-        return $this->request(self::DELETE, "servers/$serverId/ipmi");
+        return $this->request(self::POST, "servers/$serverId/remote-access/ikvm");
     }
 
     /**
