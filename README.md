@@ -431,6 +431,16 @@ composer require thg/thg-client
     );
 ```
 
+## Set a custom PXE boot URL
+*Specify a custom PXE boot URL to load your preferred network boot environment.*
+
+```php
+    $thgHostingClient->setPxeUrl(
+        string $serverId, // ID of the Server (see “Get Servers”)
+        string $body  // {"pxe_url": $string}
+    );
+```
+
 ## Get Server Bandwidth Graph
 *Get a graphical representation of the bandwidth usage for a specific server over the given period.*
 
