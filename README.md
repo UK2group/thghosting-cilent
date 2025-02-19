@@ -437,7 +437,7 @@ composer require thg/thg-client
 ```php
     $thgHostingClient->setPxeUrl(
         string $serverId, // ID of the Server (see “Get Servers”)
-        string $body  // {"pxe_url": $string}
+        string $pxeScriptUrl  // URL to PXE script
     );
 ```
 
