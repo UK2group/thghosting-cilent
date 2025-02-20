@@ -828,6 +828,14 @@ class ThgHostingClient
     /**
      * @throws ClientException
      */
+    public function setPxeUrl(string $serverId, string $pxeScriptUrl): array
+    {
+        return $this->request(self::PUT, "servers/$serverId/set-pxe", ['pxe_script_url' => $pxeScriptUrl]);
+    }
+
+    /**
+     * @throws ClientException
+     */
     public function getBillingServices(
         ?bool   $showAddOns,
         ?string $sortBy,

@@ -2,7 +2,7 @@
     "name": "thg/thg-client",
     "description": "THG Open API client",
     "type": "library",
-    "version": "1.4.3",
+    "version": "1.5.0",
     "license": "GPL-2.0-only",
     "autoload": {
         "psr-4": {
